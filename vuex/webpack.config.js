@@ -87,6 +87,10 @@ module.exports = {
         loader: "file-loader"
       },
       {
+        test: /\.jpg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file-loader"
+      },
+      {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         loader: "file-loader"
       },

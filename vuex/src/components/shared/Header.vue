@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="container--info">
-      <img class="logo" src="../../../assets/images/hat.svg" alt="site logo">
+      <!-- <img class="logo" src="../../../assets/images/hat.svg" alt="site logo"> -->
     </div>
 
     <hr>
@@ -41,7 +41,7 @@
       <!-- <button @click="handleAuth" class="button button-login">
         {{ this.$store.getters.currentUser.isAuthed ? "Logout" : "Login" }}
       </button> -->
-      <img class="logo" src="../../../assets/images/hat.svg" alt="site logo">
+      <!-- <img class="logo" src="../../../assets/images/hat.svg" alt="site logo"> -->
     </div>
   </div>
 </template>
@@ -75,12 +75,12 @@ export default class Header extends Vue {
 <style scoped>
 .header {
   width: 100%;
-  height: 9vh;
+  height: 100px;
 
   position: relative;
   top: 0;
 
-  background-color: #005792;
+  background-color: var(--primary-color);
 
   color: white;
   font-size: 2vh;
@@ -147,7 +147,7 @@ hr {
   height: 100%;
   width: 100%;
 
-  font-size: 1.2em;
+  font-size: 1.3rem;
 
   display: flex;
   align-items: center;
