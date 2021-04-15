@@ -12,7 +12,9 @@ import {
   Profile,
   EditProfile,
   ProductDetails,
-  ProductEditor
+  ProductEditor,
+  Register,
+  Recovery
 } from "./components";
 import ApiService from "./common/api.service";
 import { getToken } from "./common/jwt.service";
@@ -61,6 +63,8 @@ const router = new VueRouter({
       ]
     },
     { path: "/login", component: Login },
+    { path: "/register", component: Register },
+    { path: "/recovery", component: Recovery },
     { path: "/*", component: NotFound }
   ]
 });

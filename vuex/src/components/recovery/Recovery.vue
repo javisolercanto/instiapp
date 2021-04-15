@@ -1,33 +1,20 @@
 <template>
   <section class="auth">
     <section class="auth_container  shadow">
-      <img src="../../../assets/images/hat-green.svg" alt="logo">
-      <!-- <span class="login__disclaimer  login__disclaimer--name">IES L'ESTACIÓ</span> -->
-      <form @submit="checkForm" class="login__form" autocomplete="on">
-        <section class="login__input__container">
+      <section v-if="step === 0" class="recovery__disclaimer__container">
+        <span class="login__disclaimer  login__disclaimer--name">Starting recovering your password</span>
+        <p class="recovery__disclaimer--info">Insert your email and you will recieve an email with the instructions to recover your password</p>
+      </section>
+      <form v-if="step === 0" @submit="checkrecovery" class="recovery__form">
+        <section class="recovery__input__container">
           <input
             class="input"
-            id="email"
             v-model="data.email"
+            placeholder="Insert your email"
             type="email"
-            name="username"
-            autocomplete="email"
-            placeholder="Email"
+            name="email"
             required
           />
-          <input
-            class="input"
-            id="password"
-            v-model="data.password"
-            type="password"
-            name="password"
-            autocomplete="password"
-            placeholder="Password"
-            required
-          />
-          <section class="login__disclaimer__container">
-            <a class="login__disclaimer  login__disclaimer--password" href="/#/recovery">Forgot password?</a>
-          </section>
         </section>
 
         <section v-if="errors.length > 0" class="container-error">
@@ -35,11 +22,12 @@
           <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
         </section>
 
-        <button type="submit" class="button">Login</button>
+        <button type="submit" class="button">Recover your password</button>
         <section class="login__disclaimer__container">
-          <a class="login__disclaimer  login__disclaimer--account" href="/#/register">You don't have an account?</a>
+          <a class="login__disclaimer  login__disclaimer--account" href="/#/login">Back to login</a>
         </section>
       </form>
+
     </section>
 
 
@@ -52,13 +40,16 @@ import Component from "vue-class-component";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
-  name: "login",
+  name: "recovery-password",
 })
 export default class Login extends Vue {
   data = {
     email: "",
     password: "",
+    recovery: ['A',0,0]
   };
+
+  step: number = 0;
 
   errors: string[] = [];
 
@@ -66,6 +57,11 @@ export default class Login extends Vue {
     super();
 
     this.errors = [];
+  }
+
+  checkrecovery(e): void {
+    e.preventDefault();
+    this.step = 1;
   }
 
   checkForm(e): void {
@@ -108,60 +104,12 @@ export default class Login extends Vue {
 
 <style>
 
-/* Login */
-
-.auth {
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  background-image: url('../../../assets/images/pencil1.jpeg');
-  background-size: cover;
-
-  background-color: var(--primary-color);
-}
-
-.auth_container {
-  height: 50%;
-  width: 30%;
-  max-height: 500px;
-  min-height: 500px;
-  max-width: 400px;
-  min-width: 300px;
-
-  padding: 1rem 1.5rem 1rem 1.5rem;
-
-  background-color: var(--bg-color);
-
-  border-radius: 7px;
-
-  /* background-color: rgba(255, 255, 255, 0.822); */
-
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.auth img {
-  width: 100px;
-  height: 100px;
-
-  user-select: none;
-}
-
 /* Form */
 
-.login__form {
+.recovery__form {
   width: 100%;
   height: 70%;
-
+  
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -169,16 +117,39 @@ export default class Login extends Vue {
 
 /* Inputs */
 
-.login__input__container {
+.recovery__input__container {
   width: 100%;
   height: 70%;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-evenly;
 }
 
+.login__form--big {
+  height: 90%;
+}
+
 /* Disclaimer */
+
+.recovery__disclaimer__container {
+  height: 30%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.recovery__disclaimer__container--small {
+  height: fit-content;
+}
+
+.recovery__disclaimer--info {
+  text-align: justify;
+}
 
 .login__disclaimer__container {
   width: 100%;
@@ -195,10 +166,6 @@ export default class Login extends Vue {
   font-weight: bold;
 
   transition: 0.3s all;
-}
-
-a.login__disclaimer, a.login__disclaimer:hover {
-  text-decoration: none;
 }
 
 .login__disclaimer--name {
@@ -230,19 +197,6 @@ a.login__disclaimer, a.login__disclaimer:hover {
 .login__disclaimer--account:hover {
   color: var(--primary-color-dark);
   font-size: 1em;
-}
-
-/* Responsive */
-
-@media only screen and (max-width: 800px) {
-  .login {
-    background-size: contain;
-    background-repeat: repeat-y;
-  }
-
-  .login__disclaimer--account:hover {
-    font-size: 1.1em;
-  }
 }
 
 </style>

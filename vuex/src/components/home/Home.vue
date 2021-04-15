@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <Header />
     <router-view />
   </div>
@@ -36,6 +36,14 @@ export default class Home extends Vue {
 </script>
 
 <style>
+
+.home {
+  background-image: url('../../../assets/images/paperwall.jpeg');
+  background-repeat: repeat;
+  background-size: cover;
+
+  overflow: hidden;
+}
 
 .welcome-container {
   width: 100%;

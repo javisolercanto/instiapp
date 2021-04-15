@@ -1,48 +1,21 @@
 <template>
   <div class="header">
-    <div class="container--info">
-      <!-- <img class="logo" src="../../../assets/images/hat.svg" alt="site logo"> -->
+    <div class="header__pill  header__menu  shadow">
+      <img class="header__logo" src="../../../assets/images/homeISO.svg" alt="site logo">
+      <div class="header__menu__submenu">
+        <hr>
+        <img src="../../../assets/images/off-road.svg" alt="site logo">
+        <img src="../../../assets/images/dictionary.svg" alt="site logo">
+        <img src="../../../assets/images/bag.svg" alt="site logo">
+        <img src="../../../assets/images/bed.svg" alt="site logo">
+      </div>
     </div>
-
-    <hr>
-
-    <div class="container--links">
-      <router-link to="/">Home</router-link>
-      <router-link to="/app/products">Marketplace</router-link>
-      <router-link to="/app/editor">Rentals</router-link>
-      <router-link to="/app/editor">Forum</router-link>
-      <router-link to="/app/editor">Routes</router-link>
-    </div>
-
-    <hr>
-
-    <div class="container--buttons">
-      <button
-        v-if="this.$store.getters.currentUser.isAuthed && !this.$store.getters.currentUser.isAdmin"
-        @click="
-          () => {
-            $router.push({ path: '/app/profile' });
-          }"
-        class="button button-profile"
-      >
-        {{ this.$store.getters.currentUser.username }}
-      </button>
-      <button
-        v-if="this.$store.getters.currentUser.isAdmin"
-        @click="
-          () => {
-            $router.push({ path: '/app/panel-admin' });
-          }"
-        class="button button-admin"
-      >
-        Panel admin
-      </button>
-      <!-- <img v-if="!this.$store.getters.currentUser.isAuthed" class="logo" style="padding: 1.5vh" src="../../../assets/images/user.svg" alt="login">Login -->
-      <!-- <button @click="handleAuth" class="button button-login">
-        {{ this.$store.getters.currentUser.isAuthed ? "Logout" : "Login" }}
-      </button> -->
-      <!-- <img class="logo" src="../../../assets/images/hat.svg" alt="site logo"> -->
-    </div>
+    <section class="header__pill  header__user  shadow">
+      <!-- <div class="header__user__imgwrapper"
+        v-bind:style="{ 'backgroundImage': 'url(' + data.image + ')' }"></div> -->
+      <img src="../../../assets/images/woman.svg" alt="profile picture">
+      <span>{{data.name}}</span>
+    </section>
   </div>
 </template>
 
@@ -57,8 +30,14 @@ import { Route } from "vue-router";
 })
 export default class Header extends Vue {
   data = {
+    name: 'Marina Medina González-Conde',
+    image: 'https://cdn4.iconfinder.com/data/icons/circle-avatars-1/128/034_girl_avatar_profile_woman-2-512.png',
     currentUser: store.getters.currentUser,
   };
+
+  getProfileImage(image: string): string {
+    return 'background-image: url("' + image + '")'; 
+  }
 
   handleAuth() {
     if (this.$store.getters.currentUser.isAuthed) {
@@ -72,113 +51,133 @@ export default class Header extends Vue {
 }
 </script>
 
-<style scoped>
+<style>
 .header {
   width: 100%;
-  height: 100px;
+  height: 60px;
 
-  position: relative;
+  position: sticky;
   top: 0;
 
-  background-color: var(--primary-color);
-
-  color: white;
-  font-size: 2vh;
+  /* background-color: var(--primary-color); */
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-a {
-  color: white !important;
-  text-decoration: none;
-}
+.header__logo {
+  height: 70%;
 
-a:hover {
-  text-decoration: underline;
-  text-decoration-color: white;
-}
-
-hr {
-  height: 50%;
-}
-
-.logo {
-  height: 100%;
   cursor: pointer;
-}
-
-.container--info {
-  height: 100%;
-  width: 30%;
-
-  vertical-align: center;
-  text-align: center;
-
-  padding: 1vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   transition: 0.2s all;
 }
 
-.container--info:hover {
-  background-color: #00426F;
-}
-
-.container--buttons {
+.header__pill {
   height: 100%;
-  width: 30%;
 
-  vertical-align: center;
-  text-align: center;
-
-  padding: 1vh;
+  margin-top: 3vh;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  padding-left: 3vh;
+  padding-right: 3vh;
 
   display: flex;
   align-items: center;
-  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s all;
+  color: black;
+
+  background-color: var(--bg-color);
+  border-radius: 30px;
 }
 
-.container--links {
-  height: 100%;
+.header__menu {
+  width: 75px;
+
+  margin-left: 3vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  transition: 0.3s all;
+}
+
+.header__menu:hover {
+  width: 400px;
+}
+
+.header__menu__submenu {
+  margin-left: 30px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.header__menu__submenu hr {
+  height: 70%;
+  width: 1px;
+
+  border: 1px solid #e5e5e5;
+}
+
+.header__menu__submenu img {
+  height: 70%;
   width: 100%;
 
-  font-size: 1.3rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  transition: height 0.3s linear;
 }
 
-.container--links a {
-  margin-left: 1vh;
-  margin-right: 1vh;
+.header__menu__submenu img:hover {
+  height: 100%;
 }
 
-.button {
-  width: 15vh;
+.header__menu:hover > .header__menu__submenu {
+  width: 100%;
   height: 100%;
 
-  padding: 1vh;
+  opacity: 1;
+  visibility: visible;
 }
 
-.button:focus {
-  outline: 0;
+.header__user {
+  width: fit-content;
+  margin-right: 3vh;
+
+  transition: visibility 0s, opacity 0.5s linear;
 }
 
-.button-login {
+.header__user img {
+  height: 70%;
+  margin-right: 20px;
 }
 
-.button-profile {
-  background-color: #5136ff;
+.header__user span {
 }
 
-.button-admin {
-  color: black;
-  background-color: #ccd2db;
+.header__user__imgwrapper {
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  width: 40px;
+  height: 40px;
+
+  margin-right: 20px;
+  border-radius: 50%;
+
+  background-size: cover;
 }
+
 </style>

@@ -19,8 +19,10 @@ export { default as ProductDetails } from "./products/ProductDetails.vue";
 export { default as Comments } from "./comments/Comments.vue";
 export { default as CommentComponent } from "./comments/Comment.vue";
 
-// LOGIN
+// AUTH
 export { default as Login } from "./login/Login.vue";
+export { default as Register } from "./register/Register.vue";
+export { default as Recovery } from "./recovery/Recovery.vue";
 
 // PROFILE
 export { default as Profile } from "./profile/Profile.vue";

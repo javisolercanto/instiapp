@@ -26,12 +26,12 @@ export default Vue.extend({
 <style>
 :root {
   /* Red */
-  --primary-color: #c23835;
-  --primary-color-dark: #A12724;
+  /* --primary-color: #c23835;
+  --primary-color-dark: #A12724; */
 
   /* Green */
-  /* --primary-color: #35C25E;
-  --primary-color-dark: #24A146; */
+  --primary-color: #35C25E;
+  --primary-color-dark: #24A146;
 
   /* Blue */
   /* --primary-color: #35A2C2;
@@ -42,6 +42,12 @@ export default Vue.extend({
 
 .shadow {
   box-shadow: 0px 0px 14px 1px rgba(0,0,0,0.72);
+
+  transition: 0.3s all;
+}
+
+.shadow:hover {
+  box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.72);
 }
 
 .button {
@@ -65,12 +71,22 @@ export default Vue.extend({
 }
 
 .button:hover {
+  font-size: 1.1rem;
   background-color: var(--primary-color-dark);
+}
+
+a {
+  color: var(--primary-color) !important;
 }
 
 button:focus,
 input:focus {
   outline: 0;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .input {
