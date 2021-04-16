@@ -2,6 +2,7 @@
   <div class="home">
     <Header />
     <router-view />
+    <div class="dashboard"></div>
   </div>
 </template>
 
@@ -38,11 +39,23 @@ export default class Home extends Vue {
 <style>
 
 .home {
-  background-image: url('../../../assets/images/paperwall.jpeg');
+  /* background-image: url('../../../assets/images/paperwall.jpeg'); */
   background-repeat: repeat;
   background-size: cover;
 
+  background-color: #e5e5e5;
+
   overflow: hidden;
+}
+
+.dashboard {
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+  top: 0;
+
+  background-color: aqua;
 }
 
 .welcome-container {

@@ -53,13 +53,21 @@ export default class Header extends Vue {
 
 <style>
 .header {
-  width: 100%;
   height: 60px;
+  width: 100%;
 
-  position: sticky;
+  /* margin-top: 1vh;
+  margin-left: 1vh;
+  margin-right: 1vh; */
+
+  position: absolute;
   top: 0;
+  left: 10px;
+  right: 10px;
 
-  /* background-color: var(--primary-color); */
+  z-index: 2;
+
+  background-color: var(--primary-color);
 
   display: flex;
   align-items: center;
@@ -77,7 +85,6 @@ export default class Header extends Vue {
 .header__pill {
   height: 100%;
 
-  margin-top: 3vh;
   padding-top: 1vh;
   padding-bottom: 1vh;
   padding-left: 3vh;
@@ -97,8 +104,6 @@ export default class Header extends Vue {
 
 .header__menu {
   width: 75px;
-
-  margin-left: 3vh;
 
   display: flex;
   align-items: center;
@@ -153,7 +158,6 @@ export default class Header extends Vue {
 
 .header__user {
   width: fit-content;
-  margin-right: 3vh;
 
   transition: visibility 0s, opacity 0.5s linear;
 }
