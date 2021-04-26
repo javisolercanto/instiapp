@@ -84,10 +84,11 @@ export default class Login extends Vue {
   handleAuth(user: SetAuth): void {
     store.dispatch(
       storeTypes.root.actions!.setAuth({
+        name: user.name,
         username: user.username,
         email: user.email,
         password: user.password,
-        isLogin: true,
+        code: undefined,
         changeScreen: () => {
           this.$router.push({ path: "/" });
         },

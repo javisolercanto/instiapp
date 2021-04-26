@@ -30,16 +30,14 @@
           </section>
         </section>
 
-        <section v-if="errors.length > 0" class="container-error">
-          <b>Please, check this errors:</b>
-          <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-        </section>
-
         <button type="submit" class="button">Login</button>
         <section class="login__disclaimer__container">
           <a class="login__disclaimer  login__disclaimer--account" href="/#/register">You don't have an account?</a>
         </section>
       </form>
+
+      <ErrorContainer @clear-errors="clearErrors" :errors="errors"/>
+
     </section>
 
 
@@ -49,10 +47,14 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import ErrorContainer from "../shared/ErrorContainer.vue";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
   name: "login",
+  components: {
+    ErrorContainer
+  }
 })
 export default class Login extends Vue {
   data = {
@@ -88,10 +90,11 @@ export default class Login extends Vue {
   handleAuth(user: SetAuth): void {
     store.dispatch(
       storeTypes.root.actions!.setAuth({
+        name: user.name,
         username: user.username,
         email: user.email,
         password: user.password,
-        isLogin: true,
+        code: undefined,
         changeScreen: () => {
           this.$router.push({ path: "/" });
         },

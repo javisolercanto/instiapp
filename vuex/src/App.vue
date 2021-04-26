@@ -115,34 +115,6 @@ input::-webkit-inner-spin-button {
   border-bottom: 3px var(--primary-color-dark) solid;
 }
 
-.container-error {
-  height: fit-content;
-  width: 250px;
-
-  margin: 1.5rem;
-  padding: 1rem;
-
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  border-radius: 5px;
-
-  line-height: 2rem;
-
-  background-color: #c23834;
-  color: white;
-}
-
-.container-error p {
-  line-height: 1.5rem;
-}
-
-.container-error img {
-  width: 30px;
-  height: 30px;
-}
-
 #app{
   width: 100%;
   height: 100%;

@@ -4,7 +4,7 @@
   "description": "## Project setup",
   "main": "main.ts",
   "scripts": {
-    "start": "webpack-dev-server --open --port 4200",
+    "start": "webpack-dev-server --open --port 5400",
     "build": "webpack"
   },
   "author": "Javier Soler Cantó",

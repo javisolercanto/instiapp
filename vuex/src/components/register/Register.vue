@@ -36,11 +36,6 @@
           />
         </section>
 
-        <section v-if="errors.length > 0" class="container-error">
-          <b>Please, check this errors:</b>
-          <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-        </section>
-
         <button type="submit" class="button">Next</button>
         <section class="login__disclaimer__container">
           <a class="login__disclaimer  login__disclaimer--account" href="#">You don't have a code?</a>
@@ -52,7 +47,7 @@
           <input
             class="input"
             id="name"
-            v-model="data.name"
+            v-model="data.user.name"
             type="text"
             autocomplete="name"
             name="name"
@@ -62,7 +57,7 @@
           <input
             class="input"
             id="username"
-            v-model="data.username"
+            v-model="data.user.username"
             type="text"
             autocomplete="username"
             name="username"
@@ -72,7 +67,7 @@
           <input
             class="input"
             id="email"
-            v-model="data.email"
+            v-model="data.user.email"
             type="email"
             autocomplete="email"
             name="email"
@@ -82,7 +77,7 @@
           <input
             class="input"
             id="password"
-            v-model="data.password"
+            v-model="data.user.password"
             type="password"
             autocomplete="new-password"
             name="password"
@@ -97,6 +92,8 @@
         </section>
       </form>
 
+      <ErrorContainer @clear-errors="clearErrors" :errors="errors"/>
+
     </section>
 
 
@@ -106,18 +103,20 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+import ErrorContainer from "../shared/ErrorContainer.vue";
+import ApiService from "../../common/api.service";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
   name: "login",
+  components: {
+    ErrorContainer,
+  },
 })
 export default class Login extends Vue {
   data = {
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    code: ['A',0,0]
+    user: {} as SetAuth,
+    code: ['A',0,0] as string[]
   };
 
   step: number = 0;
@@ -132,33 +131,32 @@ export default class Login extends Vue {
 
   checkCode(e): void {
     e.preventDefault();
-    this.step = 1;
+    ApiService.get(`/code/${this.data.code.join('')}`)
+      .then(res => this.step = 1)
+      .catch(err => this.showErrors(`Code ${this.data.code.join('')} not found`))
   }
 
   checkForm(e): void {
     e.preventDefault();
-    this.clearErrors(e);
+    this.clearErrors();
 
-    let user = {
-      email: this.data.email,
-      password: this.data.password,
-    } as SetAuth;
+    this.handleAuth(this.data.user);
 
-    this.handleAuth(user);
     return;
   }
 
-  clearErrors(e): void {
+  clearErrors(): void {
     this.errors = [];
   }
 
   handleAuth(user: SetAuth): void {
     store.dispatch(
       storeTypes.root.actions!.setAuth({
+        name: user.name,
         username: user.username,
         email: user.email,
         password: user.password,
-        isLogin: true,
+        code: this.data.code,
         changeScreen: () => {
           this.$router.push({ path: "/" });
         },

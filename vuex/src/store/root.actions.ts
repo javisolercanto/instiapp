@@ -26,37 +26,30 @@ const actions: DefineActionTree<RootActions, RootState> = {
   setAuth({ commit }, { payload }) {
     commit(rootMutationsTypes.toggleLoading(true));
 
-    if (payload.isLogin) {
-      ApiService.post("users/login", { user: payload })
+    if (!payload.code) {
+      ApiService.post("auth/login", payload)
         .then(({ data }) => {
-          saveToken(data.user.token);
-          commit(rootMutationsTypes.setCurrentUser(data.user));
+          saveToken(data.accessToken);
+          commit(rootMutationsTypes.setCurrentUser(data));
           payload.changeScreen();
         })
         .catch(err => {
-          let errors = "";
-          for (var i in err.response.data.user) {
-            errors += `${i}: ${err.response.data.user[i]}`;
-          }
-          payload.showErrors(errors);
+          payload.showErrors(err.response.data.error);
         })
         .finally(() => {
           commit(rootMutationsTypes.toggleLoading(false));
         });
     } else {
-      ApiService.post("users/", { user: payload })
+      ApiService.post("auth/register", payload)
         .then(({ data }) => {
-          saveToken(data.user.token);
-          commit(rootMutationsTypes.setCurrentUser(data.user));
-          payload.changeScreen();
+          saveToken(data.accessToken);
+          commit(rootMutationsTypes.setCurrentUser(data));
+          ApiService.setHeader();
+          ApiService.put(`/code/asign/${payload.code?.join('')}`, {})
+            .then(res => payload.changeScreen())
+            .catch(err => payload.showErrors(err.response.data.error))
         })
-        .catch(err => {
-          let errors = "";
-          for (var i in err.response.data.user) {
-            errors += `${i}: ${err.response.data.user[i]}`;
-          }
-          payload.showErrors(errors);
-        })
+        .catch(err => payload.showErrors(err.response.data.error))
         .finally(() => {
           commit(rootMutationsTypes.toggleLoading(true));
         });
@@ -65,14 +58,13 @@ const actions: DefineActionTree<RootActions, RootState> = {
 
   autoAuth({ commit }) {
     ApiService.setHeader();
-    ApiService.get("user")
+    ApiService.get("auth/login")
       .then(({ data }) => {
-        saveToken(data.user.token);
-        commit(rootMutationsTypes.setCurrentUser(data.user));
+        saveToken(data.accessToken);
+        commit(rootMutationsTypes.setCurrentUser(data));
       })
       .catch(err => {
-        console.log("ERROR IN ACTION");
-        console.log(err);
+        console.log(err.response.data.error);
       });
   },
 

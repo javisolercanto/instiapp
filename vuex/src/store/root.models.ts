@@ -7,29 +7,29 @@ export interface RootState {
 
 export type User = {
   id: number;
+  name: string;
   username: string;
   password: string;
   email: string;
   image: string;
-  bio: string;
-  karma?: number;
   isAuthed: boolean;
-  isAdmin: boolean;
+  admin: boolean;
 }
 
 export type SetCurrentUser = Pick<
   User,
-  "id" | "username" | "password" | "email" | "bio" | "image" | "isAuthed"
+  "id" | "name" | "username" | "password" | "email" | "image" | "isAuthed" | "admin"
 >;
 export type ToggleLoading = {
   isLoading: boolean
 };
 
 export type SetAuth = {
+  name: string;
   username: string;
   email: string;
   password: string;
-  isLogin: boolean;
+  code?: string[];
   changeScreen: any;
   showErrors: any;
 };
@@ -60,14 +60,13 @@ export const initialRootState: RootState = {
   isLoading: false,
   currentUser: {
     id: 0,
+    name: "",
     username: "",
     password: "",
     email: "",
     image: "",
-    bio: "",
-    karma: 0,
     isAuthed: false,
-    isAdmin: false
+    admin: false
   },
   errors: "",
 };

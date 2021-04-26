@@ -12,7 +12,7 @@ const ApiService = {
   },
 
   setHeader() {
-    Vue.axios.defaults.headers.common["Authorization"] = `Token ${getToken()}`;
+    Vue.axios.defaults.headers.common["x-access-token"] = `${getToken()}`;
   },
 
   query(resource, params) {
@@ -34,7 +34,7 @@ const ApiService = {
   },
 
   post(resource, params) {
-    return Vue.axios.post(`${resource}`, params);
+    return Vue.axios.post(`${resource}`, params, {headers: {}});
   },
 
   update(resource, slug, params) {

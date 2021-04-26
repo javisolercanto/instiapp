@@ -14,26 +14,25 @@ const mutations: DefineMutationTree<RootMutations, RootState> = {
   setCurrentUser(state, { payload }) {
     state.currentUser = {
       id: payload.id,
+      name: payload.name,
       username: payload.username,
       password: "",
       email: payload.email,
-      image: payload.image ? payload.image : 'https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/avatar.png?raw=true',
-      bio: payload.bio,
+      image: payload.image,
       isAuthed: true,
-      isAdmin: false,
+      admin: payload.admin,
     }
   },
   purgeCurrentUser(state) {
     state.currentUser = {
       id: 0,
+      name: "",
       username: "",
       password: "",
       email: "",
       image: "",
-      bio: "",
       isAuthed: false,
-      isAdmin: false,
-      karma: 0
+      admin: false,
     }
   },
 };

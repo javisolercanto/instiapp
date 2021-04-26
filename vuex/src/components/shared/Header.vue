@@ -10,11 +10,9 @@
         <img src="../../../assets/images/bed.svg" alt="site logo">
       </div>
     </div>
-    <section class="header__pill  header__user  shadow">
-      <!-- <div class="header__user__imgwrapper"
-        v-bind:style="{ 'backgroundImage': 'url(' + data.image + ')' }"></div> -->
-      <img src="../../../assets/images/woman.svg" alt="profile picture">
-      <span>{{data.name}}</span>
+    <section @click="handleAuth()" class="header__pill  header__user  shadow">
+      <img v-bind:src="$store.getters.currentUser.image">
+      <span>{{$store.getters.currentUser.name}}</span>
     </section>
   </div>
 </template>
@@ -30,9 +28,6 @@ import { Route } from "vue-router";
 })
 export default class Header extends Vue {
   data = {
-    name: 'Marina Medina González-Conde',
-    image: 'https://cdn4.iconfinder.com/data/icons/circle-avatars-1/128/034_girl_avatar_profile_woman-2-512.png',
-    currentUser: store.getters.currentUser,
   };
 
   getProfileImage(image: string): string {

@@ -7,6 +7,7 @@ export { default as Home } from "./home/Home.vue";
 export { default as Header } from "./shared/Header.vue";
 export { default as Footer } from "./shared/Footer.vue";
 export { default as Pagination } from "./shared/Pagination.vue";
+export { default as ErrorContainer } from "./shared/ErrorContainer.vue";
 export { default as NotFound } from "./shared/NotFound.vue";
 
 // PRODUCTS
