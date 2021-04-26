@@ -36,6 +36,7 @@ db.Sequelize = Sequelize;
 
 db.code = require('./code.js')(sequelize, Sequelize);
 db.user = require('./user.js')(sequelize, Sequelize);
+db.category = require('./category')(sequelize, Sequelize);
 
 db.code.belongsTo(db.user);
 
