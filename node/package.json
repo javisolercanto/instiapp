@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js -L --signal SIGKILL",
+    "start": "nodemon app.js -L --signal SIGINT",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Javier Soler Cantó",
