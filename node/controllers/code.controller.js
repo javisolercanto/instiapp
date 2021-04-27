@@ -28,11 +28,11 @@ module.exports = {
             .catch(err => res.status(400).send({ error: err }));
     },
     update(req, res) {
-        Code.update(req.body, { where: { id: req.currentUser } })
+        Code.update(req.body, { where: { id: req.params.code } })
             .then(() => {
-                Code.findByPk(req.currentUser)
-                    .then(user => {
-                        return res.status(200).send(user)
+                Code.findByPk(req.params.code)
+                    .then(code => {
+                        return res.status(200).send(code)
                     })
             })
             .catch(err => {
@@ -40,13 +40,13 @@ module.exports = {
             });
     },
     delete(req, res) {
-        return Code.destroy({ where: { id: req.currentUser } })
-            .then(user => res.status(200).send({ deleted: user }))
+        return Code.destroy({ where: { id: req.params.code } })
+            .then(code => res.status(200).send({ deleted: code }))
             .catch(error => res.status(400).send({ error: error }))
     },
     findAll(_, res) {
         return Code.findAll({})
-            .then(user => res.status(200).send(user))
+            .then(code => res.status(200).send(code))
             .catch(error => res.status(400).send(error))
     }
 };
