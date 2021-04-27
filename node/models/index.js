@@ -37,8 +37,12 @@ db.Sequelize = Sequelize;
 db.code = require('./code.js')(sequelize, Sequelize);
 db.user = require('./user.js')(sequelize, Sequelize);
 db.category = require('./category')(sequelize, Sequelize);
+db.product = require('./product')(sequelize, Sequelize);
 
 db.code.belongsTo(db.user);
+
+db.product.belongsTo(db.user);
+db.product.belongsTo(db.category);
 
 // Sync SQL with Sequelize Models USE CAUTION
 // sequelize.sync({alter:true});

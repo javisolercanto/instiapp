@@ -17,6 +17,7 @@ require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/code.routes')(app);
 require('./routes/category.routes')(app);
+require('./routes/product.routes')(app);
 
 app.get('*', (req, res) => res.status(200).send({
   error: 'Welcome to the beginning of nothingness.',
