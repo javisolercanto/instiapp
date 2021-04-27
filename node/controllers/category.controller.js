@@ -28,10 +28,7 @@ module.exports = {
 
         Category.create(validation.category)
             .then((category) => {
-                Category.findByPk(category.id)
-                    .then(category => {
-                        return res.status(200).send(category)
-                    })
+                return res.status(200).send(category)
             })
             .catch(err => {
                 return res.status(400).send({ error: err });
