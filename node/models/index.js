@@ -40,6 +40,7 @@ db.category = require('./category')(sequelize, Sequelize);
 db.product = require('./product')(sequelize, Sequelize);
 db.location = require('./location')(sequelize, Sequelize);
 db.route = require('./route')(sequelize, Sequelize);
+db.route = require('./rental')(sequelize, Sequelize);
 
 db.code.belongsTo(db.user);
 
@@ -49,7 +50,10 @@ db.product.belongsTo(db.category);
 db.route.belongsTo(db.user);
 db.route.belongsTo(db.location);
 
+db.rental.belongsTo(db.user);
+db.rental.belongsTo(db.location);
+
 // Sync SQL with Sequelize Models USE CAUTION
-// sequelize.sync({alter:true});
+sequelize.sync({alter:true});
 
 module.exports = db;
