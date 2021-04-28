@@ -7,7 +7,7 @@ const LocationController = require('./location.controller');
 
 module.exports = {
     async get(req, res) {
-        const route = await Route.findByPk(req.params.route);
+        const route = await Route.findByPk(req.params.route, { include: [User, Location] });
         if (!route) {
             return res.status(404).send({ error: `Route ${req.params.route} not found` });
         }
@@ -45,6 +45,10 @@ module.exports = {
             return res.status(404).send({ error: `Route with id ${req.params.route} not found` });
         }
 
+        if (route.userId !== req.currentUser) {
+            return res.status(404).send({ error: `You are not the owner of this route` });
+        }
+
         const validation = Route.validate(req.body);
         if (validation.response !== 200) {
             return res.status(validation.response).send({ error: validation.error });
@@ -52,7 +56,7 @@ module.exports = {
 
         Route.update(req.body, { where: { id: route.id } })
             .then(async () => {
-                Route.findByPk(req.params.route)
+                Route.findByPk(req.params.route, { include: [User, Location] })
                     .then(async route => {
                         const location = await LocationController.createIfNotExist(validation.route.location);
                         if (location) {
@@ -67,18 +71,27 @@ module.exports = {
                 return res.status(400).send({ error: err });
             });
     },
-    delete(req, res) {
+    async delete(req, res) {
+        const route = await Route.findByPk(req.params.route, { include: [User, Location] });
+        if (!route) {
+            return res.status(404).send({ error: `Route ${req.params.route} not found` });
+        }
+
+        if (route.userId !== req.currentUser) {
+            return res.status(404).send({ error: `You are not the owner of this route` });
+        }
+
         return Route.destroy({ where: { id: req.params.route } })
             .then(route => res.status(200).send({ deleted: route }))
             .catch(error => res.status(400).send({ error: error }))
     },
     findByName(req, res) {
-        return Route.findAll({ where: { name: { $like: `%${req.params.route}%` } } })
+        return Route.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.route}%` } } })
             .then(routes => res.status(200).send(routes))
             .catch(error => res.status(400).send(error))
     },
     findAll(_, res) {
-        return Route.findAll({})
+        return Route.findAll({ include: [User, Location] })
             .then(routes => res.status(200).send(routes))
             .catch(error => res.status(400).send(error))
     }
