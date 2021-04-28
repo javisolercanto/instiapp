@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         return { response: 400, error: 'Price must be between 0€ and 9999€' }
       if (!route.seats || route.seats <= 0 || route.seats > 100)
         return { response: 400, error: 'Seats must be between 1 and 100' }
-      if (!route.date || route.date < new Date())
-        return { response: 400, error: 'If you don\'t have a time machine that date it\'s imposible' }
+      if (!route.date || !new Date(route.date) < new Date())
+        return { response: 400, error: 'If you don\'t have a time machine that date it\'s imposible to be correct' }
 
       return { response: 200, route: route }
     }
