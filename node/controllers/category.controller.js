@@ -23,7 +23,7 @@ module.exports = {
     create(req, res) {
         const validation = Category.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         Category.create(validation.category)
@@ -37,7 +37,7 @@ module.exports = {
     update(req, res) {
         const validation = Category.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         Category.update(validation.category, { where: { id: req.params.category } })

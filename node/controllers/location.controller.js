@@ -35,7 +35,7 @@ module.exports = {
     create(req, res) {
         const validation = Location.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         Location.create(validation.location)
@@ -49,7 +49,7 @@ module.exports = {
     update(req, res) {
         const validation = Location.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         Location.update(validation.location, { where: { id: req.params.location } })

@@ -22,7 +22,7 @@ module.exports = {
 
         const validation = Route.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         return Route.create(validation.route)
@@ -35,7 +35,7 @@ module.exports = {
                 }
 
                 await route.save();
-                res.status(200).send(route);
+                return res.status(200).send(route);
             })
             .catch(err => res.status(400).send({ error: err }));
     },
@@ -47,7 +47,7 @@ module.exports = {
 
         const validation = Route.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         Route.update(req.body, { where: { id: route.id } })

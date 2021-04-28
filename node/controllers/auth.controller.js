@@ -28,7 +28,7 @@ module.exports = {
                     expiresIn: 43200 // 12 hours
                 });
 
-                res.status(200).send({
+                return res.status(200).send({
                     id: user.id,
                     name: user.name,
                     username: user.username,
@@ -38,9 +38,7 @@ module.exports = {
                     accessToken: token
                 });
             })
-            .catch(err => {
-                res.status(500).send({ error: err });
-            });
+            .catch(err => res.status(500).send({ error: err }));
     },
     autoLogin(req, res) {
         User.findOne({ where: { id: req.currentUser } })
@@ -53,7 +51,7 @@ module.exports = {
                     expiresIn: 43200 // 12 hours
                 });
 
-                res.status(200).send({
+                return res.status(200).send({
                     id: user.id,
                     name: user.name,
                     username: user.username,
@@ -63,14 +61,12 @@ module.exports = {
                     accessToken: token
                 });
             })
-            .catch(err => {
-                res.status(500).send({ error: err });
-            });
+            .catch(err => res.status(500).send({ error: err }));
     },
     async register(req, res) {
         const validation = User.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         validation.user.password = Bcrypt.hashSync(validation.user.password, 8);
@@ -80,7 +76,7 @@ module.exports = {
                     expiresIn: 43200 // 12 hours
                 });
 
-                res.status(200).send({
+                return res.status(200).send({
                     id: user.id,
                     name: user.name,
                     username: user.username,

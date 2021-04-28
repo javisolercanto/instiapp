@@ -20,7 +20,7 @@ module.exports = {
 
         const validation = Product.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         return Product.create(validation.product)
@@ -34,7 +34,7 @@ module.exports = {
                     await product.setCategory(category);
                 }
                 await product.save();
-                res.status(200).send(product);
+                return res.status(200).send(product);
             })
             .catch(err => res.status(400).send({ error: err }));
     },
@@ -46,7 +46,7 @@ module.exports = {
 
         const validation = Product.validate(req.body);
         if (validation.response !== 200) {
-            res.status(validation.response).send({ error: validation.error });
+            return res.status(validation.response).send({ error: validation.error });
         }
 
         if (validation.product.category) {
