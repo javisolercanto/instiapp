@@ -22,21 +22,21 @@ module.exports = {
         if (validation.response !== 200) {
             res.status(validation.response).send({ error: validation.error });
         }
-        
+
         return Product.create(validation.product)
-        .then(async product => {
-            await product.setUser(user);
-            if (validation.product.category) {
-                const category = await Category.findByPk(validation.product.category);
-                if (!category) {
-                    return res.status(400).send({ error: `Category not found` });
+            .then(async product => {
+                await product.setUser(user);
+                if (validation.product.category) {
+                    const category = await Category.findByPk(validation.product.category);
+                    if (!category) {
+                        return res.status(400).send({ error: `Category not found` });
+                    }
+                    await product.setCategory(category);
                 }
-                await product.setCategory(category);
-            }
-            await product.save();
-            res.status(200).send(product);
+                await product.save();
+                res.status(200).send(product);
             })
-        .catch(err => res.status(400).send({ error: err }));
+            .catch(err => res.status(400).send({ error: err }));
     },
     async update(req, res) {
         const product = await Product.findByPk(req.params.product);
@@ -58,7 +58,7 @@ module.exports = {
             await product.setCategory(category);
             await product.save();
         }
-        
+
         Product.update(validation.product, { where: { id: req.params.product } })
             .then(() => {
                 Product.findByPk(req.params.product)
@@ -74,6 +74,11 @@ module.exports = {
         return Product.destroy({ where: { id: req.params.product } })
             .then(product => res.status(200).send({ deleted: product }))
             .catch(error => res.status(400).send({ error: error }))
+    },
+    findByName(req, res) {
+        return Product.findAll({ where: { name: { $like: `%${req.params.product}%` } } })
+            .then(product => res.status(200).send(product))
+            .catch(error => res.status(400).send(error))
     },
     findAll(_, res) {
         return Product.findAll({})
