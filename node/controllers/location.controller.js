@@ -4,7 +4,6 @@ const Location = Models.location;
 module.exports = {
     async get(req, res) {
         const location = await Location.findByPk(req.params.location);
-
         if (!location) {
             return res.status(404).send({ error: `Location with id ${req.params.location} not found` });
         }
@@ -12,8 +11,7 @@ module.exports = {
         return res.status(200).send(location);
     },
     async findByName(req, res) {
-        const location = await Location.findOne({ where: { name: req.params.location } });
-
+        const location = await Location.findOne({ where: { name: { $like: `%${req.params.location}%` } } });
         if (!location) {
             return res.status(404).send({ error: `Location ${req.params.location} not found` });
         }
@@ -74,5 +72,34 @@ module.exports = {
         return Location.findAll({})
             .then(location => res.status(200).send(location))
             .catch(error => res.status(400).send(error))
-    }
+    },
+    async createIfNotExist(location) {
+        if (!location) {
+            return null;
+        }
+
+        const searchedLocation = await Location.findOne({
+            where: {
+                latitude: location.latitude,
+                longitude: location.longitude
+            }
+        });
+
+        if (!searchedLocation) {
+            const validation = Location.validate(location);
+            if (validation.response !== 200) {
+                return null;
+            }
+
+            return Location.create(validation.location)
+                .then(location => {
+                    return location;
+                })
+                .catch(err => {
+                    return null;
+                });
+        }
+
+        return searchedLocation;
+    },
 };

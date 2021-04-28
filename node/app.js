@@ -19,6 +19,7 @@ require('./routes/code.routes')(app);
 require('./routes/category.routes')(app);
 require('./routes/product.routes')(app);
 require('./routes/location.routes')(app);
+require('./routes/route.routes')(app);
 
 app.get('*', (req, res) => res.status(200).send({
   error: 'Welcome to the beginning of nothingness.',
