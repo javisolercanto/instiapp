@@ -56,6 +56,11 @@ module.exports = {
             .then(category => res.status(200).send({ deleted: category }))
             .catch(error => res.status(400).send({ error: error }))
     },
+    findByName(req, res) {
+        return Category.findAll({ where: { name: { $like: `%${req.params.category}%` } } })
+            .then(categories => res.status(200).send(categories))
+            .catch(error => res.status(400).send(error))
+    },
     findAll(_, res) {
         return Category.findAll({})
             .then(category => res.status(200).send(category))
