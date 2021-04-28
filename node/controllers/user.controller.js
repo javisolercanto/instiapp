@@ -1,6 +1,12 @@
 const Bcrypt = require('bcryptjs');
 const Models = require('../models');
 const User = Models.user;
+const Post = Models.post;
+const Product = Models.product;
+const Rental = Models.rental;
+const Route = Models.route;
+
+const UserFields = ['id', 'name', 'username', 'email', 'image', 'admin', 'createdAt', 'updatedAt', 'password'];
 
 module.exports = {
     update(req, res) {
@@ -24,6 +30,46 @@ module.exports = {
     },
     profile(req, res) {
         return User.findByPk(req.currentUser)
+            .then(user => res.status(200).send(user))
+            .catch(error => res.status(400).send({ error: error }))
+    },
+    getPosts(req, res) {
+        return User.findByPk(req.currentUser, {
+            include: [Post],
+            attributes: {
+                exclude: UserFields
+            }
+        })
+            .then(user => res.status(200).send(user))
+            .catch(error => res.status(400).send({ error: error }))
+    },
+    getProducts(req, res) {
+        return User.findByPk(req.currentUser, {
+            include: [Product],
+            attributes: {
+                exclude: UserFields
+            }
+        })
+            .then(user => res.status(200).send(user))
+            .catch(error => res.status(400).send({ error: error }))
+    },
+    getRentals(req, res) {
+        return User.findByPk(req.currentUser, {
+            include: [Rental],
+            attributes: {
+                exclude: UserFields
+            }
+        })
+            .then(user => res.status(200).send(user))
+            .catch(error => res.status(400).send({ error: error }))
+    },
+    getRoutes(req, res) {
+        return User.findByPk(req.currentUser, {
+            include: [Route],
+            attributes: {
+                exclude: UserFields
+            }
+        })
             .then(user => res.status(200).send(user))
             .catch(error => res.status(400).send({ error: error }))
     },

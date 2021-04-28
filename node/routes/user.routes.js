@@ -34,6 +34,22 @@ module.exports = (app) => {
         [AuthJwt.verifyToken],
         UserController.profile
     );
+    app.get('/api/user/posts',
+        [AuthJwt.verifyToken],
+        UserController.getPosts
+    );
+    app.get('/api/user/products',
+        [AuthJwt.verifyToken],
+        UserController.getProducts
+    );
+    app.get('/api/user/rentals',
+        [AuthJwt.verifyToken],
+        UserController.getRentals
+    );
+    app.get('/api/user/routes',
+        [AuthJwt.verifyToken],
+        UserController.getRoutes
+    );
     app.put('/api/user/',
         [AuthJwt.verifyToken],
         UserController.update
