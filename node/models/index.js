@@ -40,20 +40,39 @@ db.category = require('./category')(sequelize, Sequelize);
 db.product = require('./product')(sequelize, Sequelize);
 db.location = require('./location')(sequelize, Sequelize);
 db.route = require('./route')(sequelize, Sequelize);
-db.route = require('./rental')(sequelize, Sequelize);
+db.rental = require('./rental')(sequelize, Sequelize);
+db.post = require('./post')(sequelize, Sequelize);
 
 db.code.belongsTo(db.user);
+db.user.hasMany(db.code);
 
 db.product.belongsTo(db.user);
 db.product.belongsTo(db.category);
+db.user.hasMany(db.product);
 
 db.route.belongsTo(db.user);
 db.route.belongsTo(db.location);
+db.user.hasMany(db.route);
 
 db.rental.belongsTo(db.user);
 db.rental.belongsTo(db.location);
+db.user.hasMany(db.rental);
+
+db.post.belongsTo(db.user);
+db.post.belongsTo(db.post, { as: 'parent', onDelete: 'cascade' });
+db.post.belongsTo(db.category);
+db.user.hasMany(db.post);
+
+
+db.user.belongsToMany(db.post, {
+  through: "reactions",
+});
+
+db.post.belongsToMany(db.user, {
+  through: "reactions",
+});
 
 // Sync SQL with Sequelize Models USE CAUTION
-sequelize.sync({alter:true});
+// sequelize.sync({alter:true});
 
 module.exports = db;
