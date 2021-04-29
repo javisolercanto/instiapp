@@ -122,6 +122,10 @@ module.exports = {
             return res.status(404).send({ error: `You are not the owner of this post` });
         }
 
+        if (post.parentId && post.resolved) {
+            await Post.update({ resolved: false }, { where: { id: post.parentId } });
+        }
+
         return Post.destroy({ where: { id: req.params.post } })
             .then(post => res.status(200).send({ deleted: post }))
             .catch(error => res.status(400).send({ error: error }))
