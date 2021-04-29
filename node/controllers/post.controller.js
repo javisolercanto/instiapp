@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Models = require('../models');
 const User = Models.user;
 const Post = Models.post;
@@ -58,12 +59,12 @@ module.exports = {
             .catch(err => res.status(400).send({ error: err }));
     },
     async update(req, res) {
-        const post = await Post.findByPk(req.params.post);
+        const post = await Post.findByPk(req.params.post, { include: [{ model: Post, as: 'parent' }] });
         if (!post) {
             return res.status(404).send({ error: `Post with id ${req.params.post} not found` });
         }
 
-        if (post.userId !== req.currentUser) {
+        if (post.userId !== req.currentUser || (post.parent && post.parent.userId !== req.currentUser)) {
             return res.status(404).send({ error: `You are not the owner of this post` });
         }
 
@@ -83,10 +84,28 @@ module.exports = {
         }
 
         Post.update(validation.post, { where: { id: req.params.post } })
-            .then(() => {
+            .then(async () => {
                 Post.findByPk(req.params.post, { include: [User, { model: Post, as: 'parent' }, Category] })
-                    .then(post => {
-                        return res.status(200).send(post)
+                    .then(async updatedPost => {
+                        if (!updatedPost.parentId || post.resolved === updatedPost.resolved) {
+                            return res.status(200).send(updatedPost)
+                        }
+
+                        if (req.currentUser !== updatedPost.parent.userId) {
+                            return res.status(404).send({ error: `You can't mark as resolved if you are not the owner of this post` });
+                        }
+
+                        if (updatedPost.resolved) {
+                            await Post.update({ resolved: true }, { where: { id: updatedPost.parentId } });
+                            await Post.update({ resolved: false },
+                                { where: { parentId: updatedPost.parentId, id: { [Op.not]: updatedPost.id } } });
+                        }
+
+                        if (!updatedPost.resolved) {
+                            await Post.update({ resolved: false }, { where: { id: updatedPost.parentId } });
+                        }
+
+                        return res.status(200).send(updatedPost);
                     })
             })
             .catch(err => {
