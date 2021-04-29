@@ -39,6 +39,10 @@ module.exports = (app) => {
         [AuthJwt.verifyToken],
         PostController.update
     );
+    app.put('/api/post/react/:post',
+        [AuthJwt.verifyToken],
+        PostController.toogleReaction
+    );
     app.delete('/api/post/:post',
         [AuthJwt.verifyToken],
         PostController.delete
