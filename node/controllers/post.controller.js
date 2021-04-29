@@ -141,6 +141,43 @@ module.exports = {
             .then(post => res.status(200).send({ deleted: post }))
             .catch(error => res.status(400).send({ error: error }))
     },
+    async toogleReaction(req, res) {
+        const post = await Post.findByPk(req.params.post,
+            {
+                include: [
+                    {
+                        model: User, as: 'users',
+                        through: { attributes: ['userId', 'postId'] }
+                    }
+                ]
+            });
+
+        if (!post) {
+            return res.status(404).send({ error: `Post with id ${req.params.post} not found` });
+        }
+
+        const user = await User.findByPk(req.currentUser);
+        if (!user) {
+            return res.status(404).send({ error: `User with id ${req.currentUser} not found` });
+        }
+
+        let hasReacted = false;
+        if (post.users) post.users.map(reactedUser => {
+            if (reactedUser.id === user.id) {
+                hasReacted = true;
+            }
+        });
+
+        if (hasReacted) {
+            post.removeUser(user);
+
+        } else {
+            post.addUser(user);
+        }
+
+        post.save();
+        return res.status(200).send({ reaction: post })
+    },
     findByName(req, res) {
         return Post.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.post}%` } } })
             .then(post => res.status(200).send(post))
