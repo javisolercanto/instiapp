@@ -6,7 +6,18 @@ const Category = Models.category;
 
 module.exports = {
     async get(req, res) {
-        const post = await Post.findByPk(req.params.post, { include: [User, { model: Post, as: 'parent' }, Category] });
+        const post = await Post.findByPk(req.params.post,
+            {
+                include: [
+                    {
+                        model: User, as: 'users',
+                        through: { attributes: ['userId', 'postId'] }
+                    },
+                    { model: User, as: 'user' },
+                    { model: Post, as: 'parent' },
+                    Category
+                ]
+            });
         if (!post) {
             return res.status(404).send({ error: `Post with id ${req.params.post} not found` });
         }
@@ -136,7 +147,17 @@ module.exports = {
             .catch(error => res.status(400).send(error))
     },
     findAll(_, res) {
-        return Post.findAll({ include: [User, Location] })
+        return Post.findAll({
+            include: [
+                {
+                    model: User, as: 'users',
+                    through: { attributes: ['userId', 'postId'] }
+                },
+                { model: User, as: 'user' },
+                { model: Post, as: 'parent' },
+                Category
+            ]
+        })
             .then(post => res.status(200).send(post))
             .catch(error => res.status(400).send(error))
     }
