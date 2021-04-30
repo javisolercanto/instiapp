@@ -42,6 +42,8 @@ db.location = require('./location')(sequelize, Sequelize);
 db.route = require('./route')(sequelize, Sequelize);
 db.rental = require('./rental')(sequelize, Sequelize);
 db.post = require('./post')(sequelize, Sequelize);
+db.group = require('./group')(sequelize, Sequelize);
+db.belong = require('./belong')(sequelize, Sequelize);
 
 db.code.belongsTo(db.user);
 db.user.hasMany(db.code);
@@ -65,14 +67,26 @@ db.user.hasMany(db.post);
 
 
 db.user.belongsToMany(db.post, {
-  through: "reactions",
+  through: 'reactions',
+});
+db.post.belongsToMany(db.user, {
+  through: 'reactions',
 });
 
-db.post.belongsToMany(db.user, {
-  through: "reactions",
-});
+db.group.belongsTo(db.location);
+db.group.belongsTo(db.user);
+
+db.belong.belongsTo(db.user, { onDelete: 'cascade' });
+db.belong.belongsTo(db.group, { onDelete: 'cascade' });
+db.group.hasMany(db.belong);
+// db.user.belongsToMany(db.group, {
+//   through: db.belong
+// });
+// db.group.belongsToMany(db.user, {
+//   through: db.belong
+// });
 
 // Sync SQL with Sequelize Models USE CAUTION
-// sequelize.sync({alter:true});
+// sequelize.sync({ alter: true });
 
 module.exports = db;

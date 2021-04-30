@@ -12,7 +12,6 @@ app.use(express.urlencoded({
 
 app.use(cors());
 
-// require('./routes')(app);
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
 require('./routes/code.routes')(app);
@@ -22,6 +21,7 @@ require('./routes/location.routes')(app);
 require('./routes/route.routes')(app);
 require('./routes/rental.routes')(app);
 require('./routes/post.routes')(app);
+require('./routes/group.routes')(app);
 
 app.get('*', (req, res) => res.status(200).send({
   error: 'Welcome to the beginning of nothingness.',
