@@ -30,6 +30,10 @@ module.exports = (app) => {
     // );
 
     // Action routes
+    app.get('/api/users',
+        [AuthJwt.verifyToken, AuthJwt.isAdmin],
+        UserController.findAll
+    );
     app.get('/api/user/profile',
         [AuthJwt.verifyToken],
         UserController.profile

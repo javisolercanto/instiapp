@@ -19,11 +19,8 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/rental/find',
+    app.get('/api/rentals',
         RentalController.findAll
-    );
-    app.get('/api/rental/find/:rental',
-        RentalController.findByName
     );
     app.get('/api/rental/:rental',
         RentalController.get

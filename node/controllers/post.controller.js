@@ -178,14 +178,15 @@ module.exports = {
         post.save();
         return res.status(200).send({ reaction: post })
     },
-    findByName(req, res) {
-        return Post.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.post}%` } } })
-            .then(post => res.status(200).send(post))
-            .catch(error => res.status(400).send(error))
-    },
-    findAll(_, res) {
-        return Post.findAll({
-            include: [
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+
+        const condition = name ? { title: { [Op.like]: `%${name}%` } } : null;
+
+        return Post.findAndCountAll({
+            limit: limit, offset: offset, where: condition, include: [
                 {
                     model: User, as: 'users',
                     through: { attributes: ['userId', 'postId'] }
@@ -195,7 +196,13 @@ module.exports = {
                 Category
             ]
         })
-            .then(post => res.status(200).send(post))
+            .then(posts => {
+                const { count: totalItems, rows: data } = posts;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({ data, currentPage, totalPages, totalItems });
+            })
             .catch(error => res.status(400).send(error))
     }
 };

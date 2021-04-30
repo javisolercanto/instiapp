@@ -19,16 +19,13 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/products/',
+    app.get('/api/products',
         ProductController.findAll
     );
     app.get('/api/product/:product',
         ProductController.get
     );
-    app.get('/api/product/find/:product',
-        ProductController.findByName
-    );
-    app.post('/api/product/',
+    app.post('/api/product',
         [AuthJwt.verifyToken],
         ProductController.create
     );

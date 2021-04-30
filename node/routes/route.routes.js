@@ -19,16 +19,13 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/route/find',
+    app.get('/api/routes',
         RouteController.findAll
-    );
-    app.get('/api/route/find/:route',
-        RouteController.findByName
     );
     app.get('/api/route/:route',
         RouteController.get
     );
-    app.post('/api/route/',
+    app.post('/api/route',
         [AuthJwt.verifyToken],
         RouteController.create
     );

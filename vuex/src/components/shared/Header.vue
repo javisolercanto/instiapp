@@ -4,10 +4,22 @@
       <img class="header__logo" src="../../../assets/images/homeISO.svg" alt="site logo">
       <div class="header__menu__submenu">
         <hr>
-        <img src="../../../assets/images/off-road.svg" alt="site logo">
-        <img src="../../../assets/images/dictionary.svg" alt="site logo">
-        <img src="../../../assets/images/bag.svg" alt="site logo">
-        <img src="../../../assets/images/bed.svg" alt="site logo">
+        <section>
+          <img src="../../../assets/images/bag.svg" alt="site logo">
+          <!-- <span>Market</span> -->
+        </section>
+        <section>
+          <img src="../../../assets/images/off-road.svg" alt="site logo">
+          <!-- <span>Routes</span> -->
+        </section>
+        <section>
+          <img src="../../../assets/images/dictionary.svg" alt="site logo">
+          <!-- <span>Forum</span> -->
+        </section>
+        <section>
+          <img src="../../../assets/images/bed.svg" alt="site logo">
+          <!-- <span>Rentals</span> -->
+        </section>
       </div>
     </div>
     <section @click="handleAuth()" class="header__pill  header__user  shadow">
@@ -54,15 +66,15 @@ export default class Header extends Vue {
   /* margin-top: 1vh;
   margin-left: 1vh;
   margin-right: 1vh; */
+  
+  margin-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 10px;
-  right: 10px;
 
   z-index: 2;
-
-  background-color: var(--primary-color);
 
   display: flex;
   align-items: center;
@@ -132,15 +144,38 @@ export default class Header extends Vue {
   border: 1px solid #e5e5e5;
 }
 
-.header__menu__submenu img {
+.header__menu__submenu section {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  transition: height 0.3s linear;
+}
+
+.header__menu__submenu section img {
   height: 70%;
   width: 100%;
 
   transition: height 0.3s linear;
 }
 
-.header__menu__submenu img:hover {
+.header__menu__submenu section span {
+  font-size: 0.8rem;
+
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.header__menu__submenu section img:hover {
   height: 100%;
+}
+
+.header__menu__submenu section img:hover + span {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .header__menu:hover > .header__menu__submenu {
@@ -177,6 +212,45 @@ export default class Header extends Vue {
   border-radius: 50%;
 
   background-size: cover;
+}
+
+@media (max-width: 600px) {
+  .header__menu {
+    height: 60px;
+
+    flex-direction: column;
+  }
+
+  .header__logo {
+    width: 100%;
+
+    cursor: pointer;
+
+    transition: 0.2s all;
+  }
+
+  .header__menu:hover {
+    width: 75px;
+    height: 400px;
+  }
+
+  .header__menu__submenu {
+    margin-left: 0;
+    margin-top: 100px;
+    flex-direction: column;
+  }
+
+  .header__menu__submenu hr {
+    height: 1px;
+    width: 70%;
+  }
+
+  .header__menu__submenu section img {
+    height: 100%;
+    width: 70%;
+
+    transition: height 0.3s linear;
+  }
 }
 
 </style>

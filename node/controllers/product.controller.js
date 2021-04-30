@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Models = require('../models');
 const User = Models.user;
 const Product = Models.product;
@@ -5,7 +6,7 @@ const Category = Models.category;
 
 module.exports = {
     async get(req, res) {
-        const product = await Product.findByPk(req.params.product, { include: [User, Location] });
+        const product = await Product.findByPk(req.params.product, { include: [User, Category] });
         if (!product) {
             return res.status(404).send({ error: `Product with id ${req.params.product} not found` });
         }
@@ -65,7 +66,7 @@ module.exports = {
 
         Product.update(validation.product, { where: { id: req.params.product } })
             .then(() => {
-                Product.findByPk(req.params.product, { include: [User, Location] })
+                Product.findByPk(req.params.product, { include: [User, Category] })
                     .then(product => {
                         return res.status(200).send(product)
                     })
@@ -75,11 +76,11 @@ module.exports = {
             });
     },
     async delete(req, res) {
-        const product = await Product.findByPk(req.params.product, { include: [User, Location] });
+        const product = await Product.findByPk(req.params.product, { include: [User, Category] });
         if (!product) {
             return res.status(404).send({ error: `Product with id ${req.params.product} not found` });
         }
-        
+
         if (product.userId !== req.currentUser) {
             return res.status(404).send({ error: `You are not the owner of this product` });
         }
@@ -88,14 +89,21 @@ module.exports = {
             .then(product => res.status(200).send({ deleted: product }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findByName(req, res) {
-        return Product.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.product}%` } } })
-            .then(product => res.status(200).send(product))
-            .catch(error => res.status(400).send(error))
-    },
-    findAll(_, res) {
-        return Product.findAll({ include: [User, Location] })
-            .then(product => res.status(200).send(product))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+
+        return Product.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Category] })
+            .then(products => {
+                const { count: totalItems, rows: data } = products;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     }
 };

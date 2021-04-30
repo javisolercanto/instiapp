@@ -1,4 +1,4 @@
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 const Models = require('../models');
 const User = Models.user;
 const Location = Models.location;
@@ -239,14 +239,21 @@ module.exports = {
             .then(belong => res.status(200).send({ deleted: belong }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findByName(req, res) {
-        return Group.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.group}%` } } })
-            .then(groups => res.status(200).send(groups))
-            .catch(error => res.status(400).send(error))
-    },
-    findAll(_, res) {
-        return Group.findAll({ include: [User, Location] })
-            .then(groups => res.status(200).send(groups))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+
+        return Group.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Location] })
+            .then(groups => {
+                const { count: totalItems, rows: data } = groups;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     }
 };

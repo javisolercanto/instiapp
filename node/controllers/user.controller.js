@@ -1,4 +1,5 @@
 const Bcrypt = require('bcryptjs');
+const { Op } = require("sequelize");
 const Models = require('../models');
 const User = Models.user;
 const Post = Models.post;
@@ -78,9 +79,21 @@ module.exports = {
             .then(user => res.status(200).json({ deleted: user }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findAll(_, res) {
-        return User.findAll({})
-            .then(user => res.status(200).send(user))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { username: { [Op.like]: `%${name}%` } } : null;
+
+        return User.findAndCountAll({ limit: limit, offset: offset, where: condition })
+            .then(users => {
+                const { count: totalItems, rows: data } = users;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     },
     findByUsername(req, res) {

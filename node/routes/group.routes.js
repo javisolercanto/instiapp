@@ -19,11 +19,8 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/group/find',
+    app.get('/api/groups',
         GroupController.findAll
-    );
-    app.get('/api/group/find/:group',
-        GroupController.findByName
     );
     app.get('/api/group/:group',
         GroupController.get
@@ -47,7 +44,7 @@ module.exports = (app) => {
         [AuthJwt.verifyToken],
         GroupController.removeUser
     );
-    app.post('/api/group/',
+    app.post('/api/group',
         [AuthJwt.verifyToken],
         GroupController.create
     );

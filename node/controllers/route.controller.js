@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Models = require('../models');
 const User = Models.user;
 const Location = Models.location;
@@ -85,14 +86,21 @@ module.exports = {
             .then(route => res.status(200).send({ deleted: route }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findByName(req, res) {
-        return Route.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.route}%` } } })
-            .then(routes => res.status(200).send(routes))
-            .catch(error => res.status(400).send(error))
-    },
-    findAll(_, res) {
-        return Route.findAll({ include: [User, Location] })
-            .then(routes => res.status(200).send(routes))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { title: { [Op.like]: `%${name}%` } } : null;
+
+        return Route.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Location] })
+            .then(routes => {
+                const { count: totalItems, rows: data } = routes;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     }
 };

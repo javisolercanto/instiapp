@@ -19,16 +19,13 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/category/find',
+    app.get('/api/categories',
         CategoryController.findAll
-    );
-    app.get('/api/category/find/:category',
-        CategoryController.find
     );
     app.get('/api/category/:category',
         CategoryController.get
     );
-    app.post('/api/category/',
+    app.post('/api/category',
         [AuthJwt.verifyToken, AuthJwt.isAdmin],
         CategoryController.create
     );

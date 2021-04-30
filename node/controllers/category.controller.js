@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Models = require('../models');
 const Category = Models.category;
 
@@ -7,15 +8,6 @@ module.exports = {
 
         if (!category) {
             return res.status(404).send({ error: `Category with id ${req.params.category} not found` });
-        }
-
-        return res.status(200).send(category);
-    },
-    async find(req, res) {
-        const category = await Category.findOne({ where: { name: req.params.category } });
-
-        if (!category) {
-            return res.status(404).send({ error: `Category ${req.params.category} not found` });
         }
 
         return res.status(200).send(category);
@@ -56,14 +48,21 @@ module.exports = {
             .then(category => res.status(200).send({ deleted: category }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findByName(req, res) {
-        return Category.findAll({ where: { name: { $like: `%${req.params.category}%` } } })
-            .then(categories => res.status(200).send(categories))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+
+        return Category.findAndCountAll({ limit: limit, offset: offset, where: condition })
+            .then(categories => {
+                const { count: totalItems, rows: data } = categories;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     },
-    findAll(_, res) {
-        return Category.findAll({})
-            .then(category => res.status(200).send(category))
-            .catch(error => res.status(400).send(error))
-    }
 };

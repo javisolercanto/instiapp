@@ -19,11 +19,8 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/posts/',
+    app.get('/api/posts',
         PostController.findAll
-    );
-    app.get('/api/posts/find/:post',
-    PostController.findByName
     );
     app.get('/api/post/:post',
     PostController.get
@@ -31,7 +28,7 @@ module.exports = (app) => {
     app.get('/api/post/:post/replies',
         PostController.getReplies
     );
-    app.post('/api/post/',
+    app.post('/api/post',
         [AuthJwt.verifyToken],
         PostController.create
     );

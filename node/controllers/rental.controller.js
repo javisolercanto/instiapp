@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Models = require('../models');
 const User = Models.user;
 const Location = Models.location;
@@ -85,14 +86,21 @@ module.exports = {
             .then(rental => res.status(200).send({ deleted: rental }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findByName(req, res) {
-        return Rental.findAll({ include: [User, Location], where: { name: { $like: `%${req.params.rental}%` } } })
-            .then(rentals => res.status(200).send(rentals))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { title: { [Op.like]: `%${name}%` } } : null;
+
+        return Rental.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Location] })
+            .then(rentals => {
+                const { count: totalItems, rows: data } = rentals;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     },
-    findAll(_, res) {
-        return Rental.findAll({ include: [User, Location] })
-            .then(rentals => res.status(200).send(rentals))
-            .catch(error => res.status(400).send(error))
-    }
 };
