@@ -3,6 +3,7 @@ const Jwt = require('jsonwebtoken');
 const Config = require("../config/auth.config.js");
 const Models = require('../models');
 const User = Models.user;
+const Code = Models.code;
 
 module.exports = {
     login(req, res) {
@@ -86,6 +87,38 @@ module.exports = {
                     accessToken: token
                 });
             })
+            .catch(error => res.status(400).send(error))
+    },
+    async changePassword(req, res) {
+        if (!req.body || !req.body.email || !req.body.password) {
+            return res.status(400).send({ error: 'You must provide your credentials' });
+        }
+
+        const user = await User.findOne({ where: { email: req.body.email } });
+        if (!user) {
+            return res.status(400).send({ error: `User not found with email ${req.body.email}` });
+        }
+
+        const code = await Code.findOne({ where: { name: req.params.code, userId: user.id } });
+        if (!code) {
+            return res.status(400).send({ error: 'Recovering your password is not possible now, please contact with the support team' });
+        }
+
+        if (!req.body.password || req.body.password.length < 8 || req.body.password.length > 100) {
+            return res.status(400).send({ error: 'Password must be between 8 and 100 characters' });
+        }
+
+        const samePassword = Bcrypt.compareSync(
+            req.body.password,
+            user.password
+        );
+        if (samePassword) {
+            return res.status(400).send({ error: 'Password can\'t be the same' });
+        }
+
+        const newPassword = Bcrypt.hashSync(req.body.password, 8);
+        return User.update({ password: newPassword }, { where: { id: user.id } })
+            .then(user => res.status(200).send())
             .catch(error => res.status(400).send(error))
     },
 };

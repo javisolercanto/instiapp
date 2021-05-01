@@ -24,8 +24,8 @@ module.exports = (app) => {
         [VerifyRegister.checkDuplicateUsernameOrEmail],
         AuthController.register
     );
-
     app.post('/api/auth/login', AuthController.login);
+    app.put('/api/auth/change-password/:code', AuthController.changePassword);
     app.get('/api/auth/login',
         [AuthJwt.verifyToken],
         AuthController.autoLogin
