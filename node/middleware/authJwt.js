@@ -4,8 +4,7 @@ const Models = require('../models');
 const User = Models.user;
 
 verifyToken = (req, res, next) => {
-    let token = req.headers['x-access-token'];
-
+    const token = req.headers['x-access-token'];
     if (!token) {
         return res.status(403).send({
             error: 'No token provided'
@@ -14,9 +13,7 @@ verifyToken = (req, res, next) => {
 
     Jwt.verify(token, Config.secret, (err, decoded) => {
         if (err) {
-            return res.status(401).send({
-                error: 'Unauthorized'
-            });
+            return res.status(401).send({ error: 'Unauthorized' });
         }
         req.currentUser = decoded.id;
         next();
@@ -30,10 +27,7 @@ isAdmin = (req, res, next) => {
             return;
         }
 
-        res.status(403).send({
-            error: 'Require admin role'
-        });
-        return;
+        return res.status(403).send({ error: 'Require admin role' });
     });
 };
 
