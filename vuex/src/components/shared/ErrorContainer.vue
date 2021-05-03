@@ -23,7 +23,7 @@ export default class ErrorContainer extends Vue {
   }
 
   @Watch("errors")
-  onChangeOffset(value: string[], oldValue: string[]) {
+  onChangeErrors(value: string[], oldValue: string[]) {
     this.data.errors = value;
     setTimeout(this.clearErrors, 4000);
   }
