@@ -12,14 +12,13 @@ import { Loader, Header, Footer } from "./components";
 
 export default Vue.extend({
   name: "App",
-  components: { Loader , Header, Footer },
+  components: { Loader, Header, Footer },
   created() {
     this.reloadProducts();
   },
   methods: {
-    reloadProducts() {
-    }
-  }
+    reloadProducts() {},
+  },
 });
 </script>
 
@@ -30,8 +29,8 @@ export default Vue.extend({
   --primary-color-dark: #A12724; */
 
   /* Green */
-  --primary-color: #35C25E;
-  --primary-color-dark: #24A146;
+  --primary-color: #35c25e;
+  --primary-color-dark: #24a146;
 
   /* Blue */
   /* --primary-color: #35A2C2;
@@ -41,26 +40,26 @@ export default Vue.extend({
 }
 
 .shadow {
-  box-shadow: 0px 0px 14px 1px rgba(0,0,0,0.72);
+  box-shadow: 0px 0px 14px 1px rgba(0, 0, 0, 0.72);
 
   transition: 0.3s all;
 }
 
 .shadow:hover {
-  box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.72);
+  box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.72);
 }
 
 .button {
   width: 100%;
   height: 50px;
 
-  color: var(--primary-color);
-  background-color: var(--primary-color);
+  color: var(--primary-color) !important;
+  /* background-color: var(--primary-color); */
 
-  border-bottom: 3px var(--primary-color-dark) solid;
+  border: 2px var(--primary-color) solid;
   border-radius: 5px;
 
-  color: white !important;
+  /* color: white !important; */
   font-weight: bold;
 
   display: flex;
@@ -72,7 +71,8 @@ export default Vue.extend({
 
 .button:hover {
   font-size: 1.1rem;
-  background-color: var(--primary-color-dark);
+  background-color: var(--primary-color);
+  color: white !important;
 }
 
 a {
@@ -94,9 +94,9 @@ input::-webkit-inner-spin-button {
   width: 100%;
 
   color: black;
-  background-color: #e5e5e5;
+  /* background-color: #e5e5e5; */
 
-  border-bottom: 3px var(--primary-color) solid;
+  border-bottom: 2px var(--primary-color) solid;
   border-radius: 5px;
 
   padding-left: 1.5rem;
@@ -112,10 +112,10 @@ input::-webkit-inner-spin-button {
 }
 
 .input:focus {
-  border-bottom: 3px var(--primary-color-dark) solid;
+  border-bottom: 2px var(--primary-color) solid;
 }
 
-#app{
+#app {
   width: 100%;
   height: 100%;
   min-height: 100%;
