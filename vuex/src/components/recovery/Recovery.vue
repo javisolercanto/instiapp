@@ -1,12 +1,12 @@
 <template>
   <section class="auth">
     <section class="auth_container  shadow">
-      <section v-if="step === 0" class="recovery__disclaimer__container">
+      <section class="recovery__disclaimer__container">
         <span class="login__disclaimer  login__disclaimer--name">Starting recovering your password</span>
-        <p class="recovery__disclaimer--info">Insert your email and you will recieve an email with the instructions to recover your password</p>
+        <p class="recovery__disclaimer--info">Insert your email and your personal code used at register process and you will recieve an email with the instructions to recover your password</p>
       </section>
-      <form v-if="step === 0" @submit="checkrecovery" class="recovery__form">
-        <section class="recovery__input__container">
+      <form @submit="checkRecovery" class="recovery__form">
+        <section class="recovery__container">
           <input
             class="input"
             v-model="data.email"
@@ -15,18 +15,19 @@
             name="email"
             required
           />
+
+          <Spinner :loading="data.isLoading" />
+
         </section>
 
-        <section v-if="errors.length > 0" class="container-error">
-          <b>Please, check this errors:</b>
-          <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-        </section>
+        <button type="submit" class="button">Recover password</button>
 
-        <button type="submit" class="button">Recover your password</button>
         <section class="login__disclaimer__container">
           <a class="login__disclaimer  login__disclaimer--account" href="/#/login">Back to login</a>
         </section>
       </form>
+
+      <ErrorContainer @clear-errors="clearErrors" :errors="errors"/>
 
     </section>
 
@@ -37,19 +38,25 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
+
+import ErrorContainer from "../shared/ErrorContainer.vue";
+import Spinner from "../shared/Spinner.vue";
+
+import ApiService from "../../common/api.service";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
   name: "recovery-password",
+  components: {
+    ErrorContainer,
+    Spinner
+  },
 })
 export default class Login extends Vue {
   data = {
     email: "",
-    password: "",
-    recovery: ['A',0,0]
+    isLoading: false
   };
-
-  step: number = 0;
 
   errors: string[] = [];
 
@@ -59,9 +66,18 @@ export default class Login extends Vue {
     this.errors = [];
   }
 
-  checkrecovery(e): void {
+  checkRecovery(e): void {
     e.preventDefault();
-    this.step = 1;
+
+    this.data.isLoading = true;
+    ApiService.put(`/auth/recover`, { "email": this.data.email})
+      .then(res => {
+        if (res.data) {
+          this.data.isLoading = false;
+          this.$router.push({ path: '/login' });
+        }
+      })
+      .catch(err => this.showErrors(err.response.data.error))
   }
 
   checkForm(e): void {
@@ -70,7 +86,6 @@ export default class Login extends Vue {
 
     let user = {
       email: this.data.email,
-      password: this.data.password,
     } as SetAuth;
 
     this.handleAuth(user);
@@ -110,7 +125,7 @@ export default class Login extends Vue {
 .recovery__form {
   width: 100%;
   height: 70%;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -118,18 +133,27 @@ export default class Login extends Vue {
 
 /* Inputs */
 
-.recovery__input__container {
-  width: 100%;
-  height: 70%;
+.recovery__container {
+  height: 80%;
 
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
-.login__form--big {
-  height: 90%;
+/* Spinner */
+
+.spinner__container {
+  width: 100%;
+  height: 50px;
+
+  margin-top: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 
 /* Disclaimer */
