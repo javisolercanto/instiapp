@@ -1,9 +1,22 @@
 const Bcrypt = require('bcryptjs');
 const Jwt = require('jsonwebtoken');
 const Config = require("../config/auth.config.js");
+const axios = require('axios');
+const nodemailer = require('nodemailer');
 const Models = require('../models');
 const User = Models.user;
-const Code = Models.code;
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'instiweb.help@gmail.com',
+        pass: 'instiwebpass'
+    }
+});
+
+let mailOptions = {
+    from: 'instiweb.help@gmail.com',
+};
 
 module.exports = {
     login(req, res) {
@@ -89,8 +102,8 @@ module.exports = {
             })
             .catch(error => res.status(400).send(error))
     },
-    async changePassword(req, res) {
-        if (!req.body || !req.body.email || !req.body.password) {
+    async recoverPassword(req, res) {
+        if (!req.body || !req.body.email) {
             return res.status(400).send({ error: 'You must provide your credentials' });
         }
 
@@ -99,26 +112,28 @@ module.exports = {
             return res.status(400).send({ error: `User not found with email ${req.body.email}` });
         }
 
-        const code = await Code.findOne({ where: { name: req.params.code, userId: user.id } });
-        if (!code) {
-            return res.status(400).send({ error: 'Recovering your password is not possible now, please contact with the support team' });
+        let password = await axios.get('https://www.passwordrandom.com/query?command=password&format=json&count=1')
+        if (!(password = password.data.char[0])) {
+            return res.status(400).send({ error: `Error during the recovery process try again later` });
         }
 
-        if (!req.body.password || req.body.password.length < 8 || req.body.password.length > 100) {
-            return res.status(400).send({ error: 'Password must be between 8 and 100 characters' });
-        }
+        const encrypted = Bcrypt.hashSync(password);
 
-        const samePassword = Bcrypt.compareSync(
-            req.body.password,
-            user.password
-        );
-        if (samePassword) {
-            return res.status(400).send({ error: 'Password can\'t be the same' });
-        }
+        mailOptions.to = user.email
+        mailOptions.subject = `Hi ${user.name}, your new password is here!`;
+        mailOptions.text = `Here you have your new password:
+        \n\t - ${password}
+        \n Don't forget to change your password as soon as possible,
+        \nThis is a support message please don't reply,`;
 
-        const newPassword = Bcrypt.hashSync(req.body.password, 8);
-        return User.update({ password: newPassword }, { where: { id: user.id } })
-            .then(user => res.status(200).send())
-            .catch(error => res.status(400).send(error))
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                return res.status(400).send({ error: error });
+            } else {
+                return User.update({ password: encrypted }, { where: { id: user.id } })
+                    .then(user => res.status(200).send(true))
+                    .catch(error => res.status(400).send(error))
+            }
+        });
     },
 };

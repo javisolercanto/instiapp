@@ -25,7 +25,7 @@ module.exports = (app) => {
         AuthController.register
     );
     app.post('/api/auth/login', AuthController.login);
-    app.put('/api/auth/change-password/:code', AuthController.changePassword);
+    app.put('/api/auth/recover', AuthController.recoverPassword);
     app.get('/api/auth/login',
         [AuthJwt.verifyToken],
         AuthController.autoLogin
