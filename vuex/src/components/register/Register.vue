@@ -13,6 +13,7 @@
           <input
             class="input  code__input"
             v-model="data.code[0]"
+            placeholder="0"
             type="text"
             name="code0"
             maxlength="1"
@@ -21,6 +22,7 @@
           <input
             class="input  code__input"
             v-model="data.code[1]"
+            placeholder="0"
             type="text"
             name="code1"
             maxlength="1"
@@ -29,6 +31,7 @@
           <input
             class="input  code__input"
             v-model="data.code[2]"
+            placeholder="0"
             type="text"
             name="code2"
             maxlength="1"
@@ -116,7 +119,7 @@ import store, { SetAuth, storeTypes } from "../../store";
 export default class Login extends Vue {
   data = {
     user: {} as SetAuth,
-    code: ['A',0,0] as string[]
+    code: [] as string[]
   };
 
   step: number = 0;
