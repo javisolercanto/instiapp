@@ -51,7 +51,7 @@ export default class ErrorContainer extends Vue {
 
   line-height: 2rem;
 
-  background-color: #c23834;
+  background-color: var(--warn-color);
   color: white;
 
   cursor: pointer;
