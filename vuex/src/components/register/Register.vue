@@ -107,7 +107,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import ErrorContainer from "../shared/ErrorContainer.vue";
-import ApiService from "../../common/api.service";
+import ApiService from "../../common/services/api.service";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
