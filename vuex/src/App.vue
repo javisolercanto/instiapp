@@ -36,17 +36,25 @@ export default Vue.extend({
   /* --primary-color: #35A2C2;
   --primary-color-dark: #247FA1; */
 
+  --warn-color: #c23834;
+  --warn-color-dark: #a52d29;
+  --text-color: #474747;
   --bg-color: #fff;
 }
 
 .shadow {
-  box-shadow: 0px 0px 14px 1px rgba(0, 0, 0, 0.72);
+  box-shadow: 0px 0px 14px -3px rgba(0, 0, 0, 0.72);
 
   transition: 0.3s all;
 }
 
 .shadow:hover {
-  box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.72);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.72);
+}
+
+.box {
+  border-radius: 7px;
+  background-color: white;
 }
 
 .button {
@@ -75,10 +83,15 @@ export default Vue.extend({
   color: white !important;
 }
 
+button a {
+  text-decoration: none;
+}
+
 a {
   color: var(--primary-color) !important;
 }
 
+select:focus,
 button:focus,
 input:focus {
   outline: 0;
@@ -113,6 +126,35 @@ input::-webkit-inner-spin-button {
 
 .input:focus {
   border-bottom: 2px var(--primary-color) solid;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #d3d3d3;
+  outline: none;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  border-radius: 5px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: var(--primary-color);
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: var(--primary-color);
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 #app {
