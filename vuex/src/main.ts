@@ -8,18 +8,19 @@ import {
   NotFound,
   Home,
   Login,
-  Products,
-  Profile,
-  EditProfile,
+  Product,
   ProductDetails,
   ProductEditor,
+  Profile,
+  EditProfile,
   Register,
   Recovery
 } from "./components";
-import ApiService from "./common/api.service";
+import ApiService from "./common/services/api.service";
 import { getToken } from "./common/jwt.service";
 
 Vue.use(VueRouter);
+// Vue.use(VueMaterial);
 
 Vue.filter("currency", currency);
 
@@ -36,28 +37,31 @@ const router = new VueRouter({
       component: Home,
       beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next),
       children: [
-        { path: "products", component: Products },
-        { 
-          path: "editor/", component: ProductEditor,
+        {
+          path: "product", component: Product,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
-        { 
-          path: "editor/:slug", name: "editor", component: ProductEditor,
+        {
+          path: "product/:id", name: "product-details", component: ProductDetails,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
-        { 
-          path: "products/:slug", name: "details", component: ProductDetails,
+        {
+          path: "product-editor/", name: "product-creator", component: ProductEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "product-editor/:id", name: "product-editor", component: ProductEditor,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
           path: 'profile', component: Profile, 
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
-        { 
+        {
           path: "profile-edit", component: EditProfile,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
-        { 
+        {
           path: "panel-admin", component: EditProfile,
             beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAdmin', to, from, next)
         }
