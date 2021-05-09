@@ -122,10 +122,12 @@ export default class Login extends Vue {
   align-items: center;
   justify-content: center;
 
-  background-image: url('../../../assets/images/pencil1.jpeg');
+  /* background-image: url('../../../assets/images/pencil1.jpeg'); */
   background-size: cover;
 
-  background-color: var(--primary-color);
+  /* E6E5E8 */
+  background-color: #E6E5E8;
+  /* background-color: var(--primary-color); */
 }
 
 .auth_container {
@@ -141,8 +143,6 @@ export default class Login extends Vue {
   background-color: var(--bg-color);
 
   border-radius: 7px;
-
-  /* background-color: rgba(255, 255, 255, 0.822); */
 
   position: relative;
 
