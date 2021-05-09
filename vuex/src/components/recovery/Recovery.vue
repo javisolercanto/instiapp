@@ -42,7 +42,7 @@ import Component from "vue-class-component";
 import ErrorContainer from "../shared/ErrorContainer.vue";
 import Spinner from "../shared/Spinner.vue";
 
-import ApiService from "../../common/api.service";
+import ApiService from "../../common/services/api.service";
 import store, { SetAuth, storeTypes } from "../../store";
 
 @Component({
