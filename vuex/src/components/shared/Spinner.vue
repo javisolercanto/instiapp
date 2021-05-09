@@ -1,6 +1,6 @@
 <template>
   <section class="spinner__container">
-    <section v-show="data.isLoading" class="spinner"></section>
+    <section v-show="loading" class="spinner"></section>
   </section>
 </template>
 
@@ -10,25 +10,21 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 @Component({
   name: "spinner",
 })
-export default class ErrorContainer extends Vue {
-  @Prop({ required: true, type: Boolean }) errors: boolean;
+export default class Spinner extends Vue {
+  @Prop({ required: true, type: Boolean }) loading: boolean;
 
   constructor() {
     super();
   }
 
-  data = {
-    loading: false as boolean,
-  };
-
   @Watch("loading")
   onChange(loading: boolean, oldValue: boolean) {
-    this.data.loading = loading;
+    this.loading = loading;
   }
 }
 </script>
 
-<style scoped>
+<style>
 .loader,
 .loader:before,
 .loader:after {
