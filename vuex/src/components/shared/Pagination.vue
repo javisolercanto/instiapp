@@ -1,18 +1,23 @@
 <template>
   <div class="pagination">
-    <button class="button-focus" :disabled="data.currentOffset===1" @click="changePage(data.currentOffset-1)">Previous</button>
     <div class="pages">
+      <img
+        v-bind:class="currentPage===0 ? 'button-arrow  button-arrow--disabled' : 'button-arrow'"
+        @click="changePage(currentPage-1)"
+        src="../../../assets/images/left-arrow.svg" alt="left arrow">
       <button
         class="page"
-        v-for="page in data.totalPages"
+        v-for="page in totalPages"
         v-bind:key="page"
-        v-bind:class="page === data.currentOffset ? 'page--current' : 'page--stand'"
-        @click="changePage(page)"
-      >
-        {{ page }}
+        v-bind:class="page-1 === currentPage ? 'page--current' : 'page--stand'"
+        @click="changePage(page-1)">
+          {{ page }}
       </button>
+      <img
+        v-bind:class="currentPage+1===totalPages ? 'button-arrow  button-arrow--disabled' : 'button-arrow'"
+        @click="changePage(currentPage+1)"
+        src="../../../assets/images/right-arrow.svg" alt="right arrow">
     </div>
-    <button class="button-focus" :disabled="data.currentOffset>=data.totalPages" @click="changePage(data.currentOffset+1)">Next</button>
   </div>
 </template>
 
@@ -23,92 +28,64 @@ import { Component, Prop, Vue, Emit, Watch} from "vue-property-decorator";
   name: "pagination",
 })
 export default class Pagination extends Vue {
-  @Prop({ required: true, type: Number }) readonly limit: number;
-  @Prop({ required: true, type: Number }) offset: number;
-  @Prop({ required: true, type: Number }) total: number;
+  @Prop({ required: true, type: Number }) currentPage: number;
+  @Prop({ required: true, type: Number }) totalPages: number;
 
   constructor() {
     super();
   }
 
-  data = {
-    totalPages: 0,
-    currentOffset: 0
-  }
-
-  @Watch("offset")
-  onChangeOffset(value: number, oldValue: number) {
-    this.data.currentOffset = value === 0 ? 1 : value + 1;
-  }
-
-  @Watch("total")
-  refreshPagination(value: number, oldValue: number) {
-    this.data.totalPages = Math.ceil(value / this.limit);
-  }
-
   @Emit("change-page")
-  changePage(offset) {
-    return offset;
+  changePage(page) {
+    return page;
   }
 }
 </script>
 
-<style scoped>
+<style>
 .pagination {
-  width: 79%;
-  height: 10%;
+  width: 100%;
+  height: 100%;
 
   overflow: hidden;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding-top: 1rem;
 }
 
-.button-focus {
-  height: 100%;
-  width: 10%;
-
-  color: white;
-
-  background-color: #ffad37;
+.button-arrow {
+  height: 70%;
+  cursor: pointer;
 }
 
-button:disabled {
+.button-arrow--disabled {
   opacity: 0.5;
 }
 
 .pages {
-  width: 80%;
+  width: 100%;
   height: 100%;
 
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-
-  color: white;
 }
 
 .page {
   height: 100%;
-  width: 100%;
+  width: fit-content;
+  padding: 20px;
 
-  margin: .2rem;
-}
-
-.page--stand {
-  border: 2px solid #ffad37;
-}
-
-.page--stand:hover {
-  border: 2px solid #ffad37;
-  background-color: #ffad37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .page--current {
-  background-color: #5136ff;
+  font-size: 150%;
+  color: var(--text-color);
+  border-bottom: 5px solid var(--primary-color);
 }
 
 button:focus {
