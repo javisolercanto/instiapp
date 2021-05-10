@@ -87,13 +87,30 @@ module.exports = {
             .catch(error => res.status(400).send({ error: error }))
     },
     findAll(req, res) {
-        const { page, size, name } = req.query;
+        const { page, size, title, location, price, owner, order, direction } = req.query;
         const limit = size ? +size : 3;
         const offset = page ? page * limit : 0;
         
-        const condition = name ? { title: { [Op.like]: `%${name}%` } } : null;
+        const condition = {};
+        if (title) {
+            condition.title = { [Op.like]: `%${title}%` };
+        }
+        if (location) {
+            condition.locationId = parseInt(location);
+        }
+        if (price) {
+            condition.price = { [Op.lte]: price };
+        }
+        if (owner) {
+            condition.userId = parseInt(owner);
+        }
 
-        return Rental.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Location] })
+        let orderQuery = [];
+        if (order) {
+            orderQuery.push([order, direction ? direction : 'ASC']);
+        }
+
+        return Rental.findAndCountAll({ limit: limit, offset: offset, order: orderQuery, where: condition, include: [User, Location] })
             .then(rentals => {
                 const { count: totalItems, rows: data } = rentals;
                 const currentPage = page ? +page : 0;
@@ -102,5 +119,5 @@ module.exports = {
                 return res.status(200).send({data, currentPage, totalPages, totalItems});
             })
             .catch(error => res.status(400).send(error))
-    },
+    }
 };

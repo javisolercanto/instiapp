@@ -54,8 +54,9 @@ module.exports = {
             return res.status(validation.response).send({ error: validation.error });
         }
 
+        console.log(validation.product);
         if (validation.product.category) {
-            const category = await Category.findByPk(validation.product.category);
+            const category = await Category.findByPk(validation.product.category.id);
             if (!category) {
                 return res.status(400).send({ error: `Category not found` });
             }
@@ -90,13 +91,30 @@ module.exports = {
             .catch(error => res.status(400).send({ error: error }))
     },
     findAll(req, res) {
-        const { page, size, name } = req.query;
+        const { page, size, name, price, owner, category, order, direction } = req.query;
         const limit = size ? +size : 3;
         const offset = page ? page * limit : 0;
         
-        const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+        const condition = {};
+        if (name) {
+            condition.name = { [Op.like]: `%${name}%` };
+        }
+        if (category) {
+            condition.categoryId = parseInt(category);
+        }
+        if (price) {
+            condition.price = { [Op.lte]: price };
+        }
+        if (owner) {
+            condition.userId = parseInt(owner);
+        }
+        
+        let orderQuery = [];
+        if (order) {
+            orderQuery.push([order, direction ? direction : 'ASC']);
+        }
 
-        return Product.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Category] })
+        return Product.findAndCountAll({ limit: limit, offset: offset, order: orderQuery, where: condition, include: [User, Category] })
             .then(products => {
                 const { count: totalItems, rows: data } = products;
                 const currentPage = page ? +page : 0;
