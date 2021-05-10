@@ -68,9 +68,21 @@ module.exports = {
             .then(location => res.status(200).send({ deleted: location }))
             .catch(error => res.status(400).send({ error: error }))
     },
-    findAll(_, res) {
-        return Location.findAll({})
-            .then(location => res.status(200).send(location))
+    findAll(req, res) {
+        const { page, size, name } = req.query;
+        const limit = size ? +size : 3;
+        const offset = page ? page * limit : 0;
+        
+        const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+
+        return Location.findAndCountAll({ limit: limit, offset: offset, where: condition })
+            .then(locations => {
+                const { count: totalItems, rows: data } = locations;
+                const currentPage = page ? +page : 0;
+                const totalPages = Math.ceil(totalItems / limit);
+
+                return res.status(200).send({data, currentPage, totalPages, totalItems});
+            })
             .catch(error => res.status(400).send(error))
     },
     async createIfNotExist(location) {
