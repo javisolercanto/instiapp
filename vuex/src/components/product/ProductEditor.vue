@@ -88,9 +88,6 @@ export default class ProductEditor extends Vue {
 
   data = {
     product: {
-      name: "",
-      description: "",
-      price: 0,
       image: "https://i.ibb.co/dpNjfS7/default-image.png",
     } as Product,
     categories: [] as Category[]
@@ -100,7 +97,7 @@ export default class ProductEditor extends Vue {
   editMode: boolean = false;
 
   beforeDestroy() {
-    this.data.product = null;
+    this.data.product = {} as Product;
   }
 
   mounted() {

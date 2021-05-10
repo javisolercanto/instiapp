@@ -7,6 +7,7 @@
     <span v-bind:style="{fontSize: getNameSize()}" class="preview__name">{{product.name}}</span>
 
     <section>
+      <v-icon color="#35c25e" small>mdi-calendar</v-icon>
       <span class="preview__date">{{getDate()}}</span>
       <button style="margin-top: 5px" class="button" @click="() => {
         $router.push({name: 'product-details', params: { id: product.id }})}">See more</button>
@@ -26,11 +27,8 @@ export default class ProductPreview extends Vue {
 
 @Prop({required: true, type: Object as () => Product}) readonly product: Product;
 
-constructor() {
+  constructor() {
     super();
-  }
-
-  mounted() {
   }
 
   getNameSize(): string {

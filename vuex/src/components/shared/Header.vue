@@ -1,28 +1,32 @@
 <template>
-  <div class="header">
-    <div class="header__pill  header__menu  shadow">
+  <div class="header shadow">
+    <!-- <div class="header__pill  header__menu  shadow">
       <img class="header__logo" src="../../../assets/images/homeISO.svg" alt="site logo">
       <div class="header__menu__submenu">
         <hr>
         <section>
           <img src="../../../assets/images/bag.svg" alt="site logo">
-          <!-- <span>Market</span> -->
         </section>
         <section>
           <img src="../../../assets/images/off-road.svg" alt="site logo">
-          <!-- <span>Routes</span> -->
         </section>
         <section>
           <img src="../../../assets/images/dictionary.svg" alt="site logo">
-          <!-- <span>Forum</span> -->
         </section>
         <section>
           <img src="../../../assets/images/bed.svg" alt="site logo">
-          <!-- <span>Rentals</span> -->
         </section>
       </div>
-    </div>
-    <section @click="handleAuth()" class="header__pill  header__user  shadow">
+    </div> -->
+    <section class="header__pill  header__user">
+      <span>IES L'ESTACIÓ</span>
+      <!-- <img src="../../../assets/images/menu-green.svg" alt="site logo"> -->
+    </section>
+    <nav class="header__pill  header__user">
+      <!-- <span>Market</span> -->
+      <!-- <img src="../../../assets/images/menu-green.svg" alt="site logo"> -->
+    </nav>
+    <section @click="handleAuth()" class="header__pill  header__user">
       <img v-bind:src="$store.getters.currentUser.image">
       <span>{{$store.getters.currentUser.name}}</span>
     </section>
@@ -36,7 +40,7 @@ import store, { storeTypes } from "../../store";
 import { Route } from "vue-router";
 
 @Component({
-  name: "appHeader",
+  name: "header",
 })
 export default class Header extends Vue {
   data = {
@@ -63,16 +67,12 @@ export default class Header extends Vue {
   height: 60px;
   width: 100%;
 
+  /* background-color: var(--primary-color); */
+  background-color: white;
+
   /* margin-top: 1vh;
   margin-left: 1vh;
   margin-right: 1vh; */
-  
-  margin-top: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-
-  position: fixed;
-  top: 0;
 
   z-index: 2;
 
@@ -102,11 +102,13 @@ export default class Header extends Vue {
 
   cursor: pointer;
 
-  transition: 0.2s all;
-  color: black;
+  color: var(--text-color);
+  font-weight: bold;
+}
 
-  background-color: var(--bg-color);
-  border-radius: 30px;
+.header__pill:hover {
+  color: var(--primary-color);
+  transition: 0.4s all;
 }
 
 .header__menu {

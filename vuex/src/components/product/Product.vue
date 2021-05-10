@@ -56,6 +56,16 @@
           @change="listProducts()"
         />
       </section>
+      <section class="market__filters__wrapper  market__filters__wrapper--horizontal">
+        <label class="market__filters__price__label" for="price">Show my products:</label>
+        <input
+          v-model="data.ownerChecked"
+          name="owner"
+          id="owner"
+          type="checkbox"
+          @change="listProducts()"
+        />
+      </section>
     </section>
     <section ref="list" class="market__list">
       <ProductPreview
@@ -103,11 +113,13 @@ export default class Products extends Vue {
       name: "",
       category: null,
       price: 100.0,
+      owner: null,
       page: 0,
       size: 3,
       order: "",
       direction: ""
     },
+    ownerChecked: false,
     selectedOrder: {
       order: "updatedAt",
       direction: "DESC"
@@ -154,6 +166,7 @@ export default class Products extends Vue {
   listProducts(): void {
     this.data.filters.order = this.data.selectedOrder.order;
     this.data.filters.direction = this.data.selectedOrder.direction;
+    this.data.filters.owner = this.data.ownerChecked ? store.state.currentUser.id : null;
 
     ProductService.list(this.data.filters)
       .then(res => {

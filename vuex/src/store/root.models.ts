@@ -16,6 +16,29 @@ export type User = {
   admin: boolean;
 }
 
+export type Category = {
+  id: number;
+  name: string;
+}
+
+export type Location = {
+  id: number;
+  name: string;
+  latitude: string;
+  longitude: string;
+}
+
+export type Rental = {
+  id: number,
+  title: string;
+  description: string;
+  price: number
+  user: User;
+  location: Location;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type SetCurrentUser = Pick<
   User,
   "id" | "name" | "username" | "password" | "email" | "image" | "isAuthed" | "admin"
@@ -41,12 +64,15 @@ export type ListProducts = {
 }
 
 export type Product = {
-  slug?: string;
-  title: string;
+  id: number,
+  name: string;
   description: string;
   price: number
   image: string;
-  author: User;
+  user: User;
+  category: Category;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Comment = {

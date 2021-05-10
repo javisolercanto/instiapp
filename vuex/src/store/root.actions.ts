@@ -7,7 +7,7 @@ import {
 import { DefineActionTree, DefineTypes } from "./store.helpers";
 import { rootMutationsTypes } from "./root.mutations";
 
-import ApiService from "../common/api.service";
+import ApiService from "../common/services/api.service";
 import { destroyToken, saveToken } from "../common/jwt.service";
 
 export interface RootActions {

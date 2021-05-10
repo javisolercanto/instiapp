@@ -11,6 +11,9 @@ import {
   Product,
   ProductDetails,
   ProductEditor,
+  Rental,
+  RentalDetails,
+  RentalEditor,
   Profile,
   EditProfile,
   Register,
@@ -51,6 +54,22 @@ const router = new VueRouter({
         },
         {
           path: "product-editor/:id", name: "product-editor", component: ProductEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "rental", component: Rental,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "rental/:id", name: "rental-details", component: RentalDetails,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "rental-editor/", name: "rental-creator", component: RentalEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "rental-editor/:id", name: "rental-editor", component: RentalEditor,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {

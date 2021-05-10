@@ -24,7 +24,7 @@ import store, { storeTypes, Product, Comment } from "../../store";
 import { Route } from "vue-router";
 
 import CommentComponent from "../comments/Comment.vue";
-import ApiService from "../../common/api.service";
+import ApiService from "../../common/services/api.service";
 
 @Component({
   name: "comments",

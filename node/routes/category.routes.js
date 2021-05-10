@@ -19,7 +19,7 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/categories',
+    app.get('/api/category/find',
         CategoryController.findAll
     );
     app.get('/api/category/:category',

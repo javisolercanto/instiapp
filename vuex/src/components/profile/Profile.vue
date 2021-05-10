@@ -43,7 +43,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import store, { storeTypes, User } from "../../store";
 import { Route } from "vue-router";
-import ApiService from "../../common/api.service";
+import ApiService from "../../common/services/api.service";
 
 @Component({
   name: "profile",

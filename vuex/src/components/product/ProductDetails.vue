@@ -19,7 +19,7 @@
         <section class="product__img__wrapper">
           <img class="shadow box" v-bind:src="data.product.image" v-bind:alt="data.product.name">
           <span class="product__date">
-            <v-icon color="#35c25e">mdi-calendar-range</v-icon>
+            <v-icon color="#35c25e">mdi-calendar</v-icon>
             {{getDate()}}
           </span>
         </section>
@@ -106,8 +106,8 @@ export default class ProductDetails extends Vue {
   };
 
   beforeDestroy() {
-    this.data.product = null;
-    this.data.currentUser = null;
+    this.data.product = {} as Product;
+    this.data.currentUser= {} as User;
   }
 
   mounted() {
@@ -172,10 +172,7 @@ export default class ProductDetails extends Vue {
   } 
 
   editProduct() {
-    const subject = `Hey! This could interest you: ${this.data.product.name}`;
-    const body = `Hi, ${subject}. How about to take a look?`;
-
-    window.open(`mailto:?subject=${subject}&body=${body}`);
+    this.$router.push({ name: "product-editor", params: {id: this.data.product.id.toString()} });
   } 
 
   deleteProduct() {

@@ -19,7 +19,7 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/products',
+    app.get('/api/product/list',
         ProductController.findAll
     );
     app.get('/api/product/:product',

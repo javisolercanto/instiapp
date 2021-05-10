@@ -1,13 +1,13 @@
 <template>
   <div class="home">
     <Header />
-    <router-view />
-    <div class="dashboard"></div>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { Route } from "vue-router";
 
 import Component from "vue-class-component";
 import Header from "../shared/Header.vue";
@@ -43,8 +43,6 @@ export default class Home extends Vue {
   background-repeat: repeat;
   background-size: cover;
 
-  background-color: #e5e5e5;
-
   overflow: hidden;
 }
 
@@ -54,8 +52,6 @@ export default class Home extends Vue {
 
   position: relative;
   top: 0;
-
-  background-color: aqua;
 }
 
 .welcome-container {

@@ -19,7 +19,7 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/rentals',
+    app.get('/api/rental/list',
         RentalController.findAll
     );
     app.get('/api/rental/:rental',
