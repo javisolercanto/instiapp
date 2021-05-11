@@ -87,13 +87,40 @@ module.exports = {
             .catch(error => res.status(400).send({ error: error }))
     },
     findAll(req, res) {
-        const { page, size, name } = req.query;
+        const { page, size, title, location, price, seats, owner, date, order, direction } = req.query;
         const limit = size ? +size : 3;
         const offset = page ? page * limit : 0;
         
-        const condition = name ? { title: { [Op.like]: `%${name}%` } } : null;
+        const condition = {};
+        if (title) {
+            condition.title = { [Op.like]: `%${title}%` };
+        }
+        if (location) {
+            condition.locationId = parseInt(location);
+        }
+        if (price) {
+            condition.price = { [Op.lte]: price };
+        }
+        if (seats) {
+            condition.seats = { [Op.gte]: seats };
+        }
+        if (owner) {
+            condition.userId = parseInt(owner);
+        }
+        if (date) {
+            const fromDate = new Date(date);
+            const toDate = new Date(date);
+            fromDate.setDate(fromDate.getDate() - 1);
+            toDate.setDate(toDate.getDate() + 1);
+            condition.date = { [Op.between]: [fromDate, toDate] };
+        }
 
-        return Route.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Location] })
+        let orderQuery = [];
+        if (order) {
+            orderQuery.push([order, direction ? direction : 'ASC']);
+        }
+
+        return Route.findAndCountAll({ limit: limit, offset: offset, order: orderQuery, where: condition, include: [User, Location] })
             .then(routes => {
                 const { count: totalItems, rows: data } = routes;
                 const currentPage = page ? +page : 0;
