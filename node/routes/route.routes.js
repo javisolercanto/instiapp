@@ -19,7 +19,7 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/routes',
+    app.get('/api/route/list',
         RouteController.findAll
     );
     app.get('/api/route/:route',

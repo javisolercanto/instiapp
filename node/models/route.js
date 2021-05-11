@@ -15,13 +15,13 @@ module.exports = (sequelize, DataTypes) => {
     static validate(route) {
       if (!route.title || route.title.length < 5 || route.title.length > 100)
         return { response: 400, error: 'Title must be between 5 and 100 characters' }
-      if (!route.description || route.description.length < 5 || route.description.length > 100)
-        return { response: 400, error: 'Description must be between 5 and 100 characters' }
+      if (!route.description || route.description.length < 5 || route.description.length > 300)
+        return { response: 400, error: 'Description must be between 5 and 300 characters' }
       if (!route.price || route.price <= 0 || route.price > 9999)
         return { response: 400, error: 'Price must be between 0€ and 9999€' }
       if (!route.seats || route.seats <= 0 || route.seats > 100)
         return { response: 400, error: 'Seats must be between 1 and 100' }
-      if (!route.date || !new Date(route.date) < new Date())
+      if (!route.date || route.date < new Date())
         return { response: 400, error: 'If you don\'t have a time machine that date it\'s imposible to be correct' }
 
       return { response: 200, route: route }
