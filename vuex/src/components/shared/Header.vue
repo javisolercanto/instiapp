@@ -1,32 +1,31 @@
 <template>
   <div class="header shadow">
-    <!-- <div class="header__pill  header__menu  shadow">
-      <img class="header__logo" src="../../../assets/images/homeISO.svg" alt="site logo">
-      <div class="header__menu__submenu">
-        <hr>
-        <section>
-          <img src="../../../assets/images/bag.svg" alt="site logo">
-        </section>
-        <section>
-          <img src="../../../assets/images/off-road.svg" alt="site logo">
-        </section>
-        <section>
-          <img src="../../../assets/images/dictionary.svg" alt="site logo">
-        </section>
-        <section>
-          <img src="../../../assets/images/bed.svg" alt="site logo">
-        </section>
-      </div>
-    </div> -->
     <section class="header__pill  header__user">
       <span>IES L'ESTACIÓ</span>
-      <!-- <img src="../../../assets/images/menu-green.svg" alt="site logo"> -->
     </section>
-    <nav class="header__pill  header__user">
-      <!-- <span>Market</span> -->
-      <!-- <img src="../../../assets/images/menu-green.svg" alt="site logo"> -->
+    <nav class="header__menu">
+      <section @click="() => $router.push({ name: 'product' })" v-bind:class="$route.path.includes('product') ? 'header__menu__item  header__menu__item--current' : 'header__menu__item'">
+        <v-icon color="#35c25e">mdi-shopping</v-icon>
+        <span>Market</span>
+      </section>
+      <section @click="() => $router.push({ name: 'forum' })" v-bind:class="$route.path.includes('forum') ? 'header__menu__item  header__menu__item--current' : 'header__menu__item'">
+        <v-icon color="#35c25e">mdi-forum</v-icon>
+        <span>Forum</span>
+      </section>
+      <section @click="() => $router.push({ name: 'group' })" v-bind:class="$route.path.includes('group') ? 'header__menu__item  header__menu__item--current' : 'header__menu__item'">
+        <v-icon color="#35c25e">mdi-account-multiple</v-icon>
+        <span>Groups</span>
+      </section>
+      <section @click="() => $router.push({ name: 'route' })" v-bind:class="$route.path.includes('route') ? 'header__menu__item  header__menu__item--current' : 'header__menu__item'">
+        <v-icon color="#35c25e">mdi-car</v-icon>
+        <span>Routes</span>
+      </section>
+      <section @click="() => $router.push({ name: 'rental' })" v-bind:class="$route.path.includes('rental') ? 'header__menu__item  header__menu__item--current' : 'header__menu__item'">
+        <v-icon color="#35c25e">mdi-home-city</v-icon>
+        <span>Rentals</span>
+      </section>
     </nav>
-    <section @click="handleAuth()" class="header__pill  header__user">
+    <section @click="() => $router.push({ name: 'profile' })" class="header__pill  header__user">
       <img v-bind:src="$store.getters.currentUser.image">
       <span>{{$store.getters.currentUser.name}}</span>
     </section>
@@ -48,16 +47,6 @@ export default class Header extends Vue {
 
   getProfileImage(image: string): string {
     return 'background-image: url("' + image + '")'; 
-  }
-
-  handleAuth() {
-    if (this.$store.getters.currentUser.isAuthed) {
-      store
-        .dispatch(storeTypes.root.actions!.purgeAuth())
-        .then((res) => this.$router.push({ path: "/login" }));
-    } else {
-      this.$router.push({ path: "/login" });
-    }
   }
 }
 </script>
@@ -112,80 +101,40 @@ export default class Header extends Vue {
 }
 
 .header__menu {
-  width: 75px;
+  width: 50%;
+
+  color: var(--text-color);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
+  cursor: pointer;
+
   transition: 0.3s all;
 }
 
-.header__menu:hover {
-  width: 400px;
-}
-
-.header__menu__submenu {
-  margin-left: 30px;
+.header__menu__item {
+  height: 100%;
 
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-
-  visibility: hidden;
-  opacity: 0;
-
-  transition: visibility 0s, opacity 0.5s linear;
-}
-
-.header__menu__submenu hr {
-  height: 70%;
-  width: 1px;
-
-  border: 1px solid #e5e5e5;
-}
-
-.header__menu__submenu section {
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
 
-  transition: height 0.3s linear;
+  transition: 0.3s all;
 }
 
-.header__menu__submenu section img {
-  height: 70%;
-  width: 100%;
-
-  transition: height 0.3s linear;
+.header__menu__item--current span {
+  font-weight: bold;
+  color: var(--primary-color);
 }
 
-.header__menu__submenu section span {
-  font-size: 0.8rem;
-
-  transition: visibility 0s, opacity 0.5s linear;
+.header__menu__item i {
+  margin-right: 10px;
 }
 
-.header__menu__submenu section img:hover {
-  height: 100%;
-}
-
-.header__menu__submenu section img:hover + span {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.header__menu:hover > .header__menu__submenu {
-  width: 100%;
-  height: 100%;
-
-  opacity: 1;
-  visibility: visible;
+.header__menu__item span:hover {
+  transition: 0.3s all;
+  color: var(--primary-color);
 }
 
 .header__user {
