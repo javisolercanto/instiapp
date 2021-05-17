@@ -8,6 +8,7 @@
       <form @submit="checkRecovery" class="recovery__form">
         <section class="recovery__container">
           <input
+            v-if="!data.isEmailSent" 
             class="input"
             v-model="data.email"
             placeholder="Insert your email"
@@ -16,11 +17,13 @@
             required
           />
 
+          <span v-if="data.isEmailSent">Email sent, please check your email inbox</span>
+
           <Spinner :loading="data.isLoading" />
 
         </section>
 
-        <button type="submit" class="button">Recover password</button>
+        <button :disabled="data.isEmailSent" type="submit" class="button">Recover password</button>
 
         <section class="login__disclaimer__container">
           <a class="login__disclaimer  login__disclaimer--account" href="/#/login">Back to login</a>
@@ -55,7 +58,8 @@ import store, { SetAuth, storeTypes } from "../../store";
 export default class Login extends Vue {
   data = {
     email: "",
-    isLoading: false
+    isLoading: false,
+    isEmailSent: false
   };
 
   errors: string[] = [];
@@ -74,22 +78,13 @@ export default class Login extends Vue {
       .then(res => {
         if (res.data) {
           this.data.isLoading = false;
-          this.$router.push({ path: '/login' });
+          this.data.isEmailSent = true;
         }
       })
-      .catch(err => this.showErrors(err.response.data.error))
-  }
-
-  checkForm(e): void {
-    e.preventDefault();
-    this.clearErrors(e);
-
-    let user = {
-      email: this.data.email,
-    } as SetAuth;
-
-    this.handleAuth(user);
-    return;
+      .catch(err => {
+        this.data.isLoading = false;
+        this.showErrors(err.response.data.error)
+      })
   }
 
   clearErrors(e): void {
