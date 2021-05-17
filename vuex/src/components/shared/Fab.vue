@@ -29,6 +29,8 @@ export default class Fab extends Vue {
         return 'fab--edit';
       case FabTypeEnum.DELETE:
         return 'fab--delete';
+      case FabTypeEnum.OFF:
+        return 'fab--off';
       default:
         return 'fab--add';
     }
@@ -40,6 +42,8 @@ export default class Fab extends Vue {
         return 'mdi-pencil';
       case FabTypeEnum.DELETE:
         return 'mdi-delete';
+      case FabTypeEnum.OFF:
+        return 'mdi-power';
       default:
         return 'mdi-plus';
     }
@@ -78,6 +82,7 @@ export default class Fab extends Vue {
   background-color: #3B52FF;
 }
 
+.fab--off,
 .fab--delete {
   background-color: var(--warn-color);
 }
