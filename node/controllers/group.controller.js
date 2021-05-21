@@ -4,15 +4,20 @@ const User = Models.user;
 const Location = Models.location;
 const Group = Models.group;
 const Belong = Models.belong;
+const Mail = require('./email.controller');
 
 const LocationController = require('./location.controller');
+
+let mailOptions = {
+    from: 'instiweb.help@gmail.com',
+};
 
 module.exports = {
     async get(req, res) {
         const group = await Group.findByPk(req.params.group,
             {
                 include: [
-                    { model: Belong, include: [{ model: User, required: true }], where: { confirmed: true } },
+                    { model: Belong, required: false, include: [{ model: User, required: false }], where: { confirmed: true } },
                     { model: User, as: 'user' },
                     Location
                 ]
@@ -63,7 +68,7 @@ module.exports = {
             return res.status(validation.response).send({ error: validation.error });
         }
 
-        Group.update(req.body, { where: { id: group.id } })
+        Group.update(validation.group, { where: { id: group.id } })
             .then(async () => {
                 Group.findByPk(req.params.group, {
                     include: [
@@ -103,7 +108,7 @@ module.exports = {
         const group = await Group.findByPk(req.params.group,
             {
                 include: [
-                    { model: Belong, include: [{ model: User, required: true }], where: { confirmed: false } },
+                    { model: Belong, required: false, include: [{ model: User, required: true }], where: { confirmed: false } },
                 ]
             });
         if (!group) {
@@ -113,7 +118,7 @@ module.exports = {
         return res.status(200).send(group.belongs);
     },
     async sendRequest(req, res) {
-        const group = await Group.findByPk(req.params.group);
+        const group = await Group.findByPk(req.params.group, { include: [User] });
         if (!group) {
             return res.status(404).send({ error: `Group ${req.params.group} not found` });
         }
@@ -139,7 +144,18 @@ module.exports = {
                 await belong.setGroup(group);
                 await belong.save();
 
-                return res.status(200).send(belong);
+                mailOptions.to = group.user.email;
+                mailOptions.subject = `Hi ${group.user.name}, you have a new request!`;
+                mailOptions.text = `${user.name} has request to join your group
+                \nYou can accept or deny this request from your group control panel`
+
+                Mail.send(mailOptions, function (error, info) {
+                    if (error) {
+                        return res.status(400).send({ error: error });
+                    } else {
+                        return res.status(200).send(belong);
+                    }}
+                );
             })
             .catch(error => res.status(400).send(error))
     },
@@ -172,7 +188,19 @@ module.exports = {
         }
 
         return Belong.update({ confirmed: true }, { where: { groupId: group.id, userId: user.id } })
-            .then(belong => res.status(200).send(belong))
+            .then(belong => {
+                mailOptions.to = user.email;
+                mailOptions.subject = `Hi ${user.name}, your request has been accepted!`;
+                mailOptions.text = `${user.name} your request to join ${group.name} has been accepted`
+
+                Mail.send(mailOptions, function (error, info) {
+                    if (error) {
+                        return res.status(400).send({ error: error });
+                    } else {
+                        return res.status(200).send(belong);
+                    }}
+                );
+            })
             .catch(error => res.status(400).send(error))
     },
     async denyRequest(req, res) {
@@ -204,7 +232,19 @@ module.exports = {
         }
 
         return Belong.destroy({ where: { groupId: group.id, userId: user.id } })
-            .then(belong => res.status(200).send({ deleted: belong }))
+            .then(belong => {
+                mailOptions.to = user.email;
+                mailOptions.subject = `Hi ${user.name}, your have request has been denied!`;
+                mailOptions.text = `${user.name} your request to join ${group.name} has been denied`
+
+                Mail.send(mailOptions, function (error, info) {
+                    if (error) {
+                        return res.status(400).send({ error: error });
+                    } else {
+                        return res.status(200).send({ deleted: belong })
+                    }}
+                );
+            })
             .catch(error => res.status(400).send({ error: error }))
     },
     async removeUser(req, res) {
@@ -221,7 +261,7 @@ module.exports = {
             {
                 include: [
                     {
-                        model: Belong, include: [{ model: User, required: true }],
+                        model: Belong, required: false, include: [{ model: User, required: true }],
                         where: { userId: req.params.user, confirmed: true }
                     },
                 ]
@@ -236,17 +276,55 @@ module.exports = {
         }
 
         return Belong.destroy({ where: { groupId: group.id, userId: user.id } })
-            .then(belong => res.status(200).send({ deleted: belong }))
+            .then(belong => {
+                mailOptions.to = user.email;
+                mailOptions.subject = `Hi ${user.name}, you have been removed from a route group!`;
+                mailOptions.text = `${user.name} you have been removed from a route group ${group.name}`
+
+                Mail.send(mailOptions, function (error, info) {
+                    if (error) {
+                        return res.status(400).send({ error: error });
+                    } else {
+                        return res.status(200).send({ deleted: belong })
+                    }}
+                );
+            })
             .catch(error => res.status(400).send({ error: error }))
     },
     findAll(req, res) {
-        const { page, size, name } = req.query;
+        const { page, size, name, location, price, days, owner, order, direction } = req.query;
         const limit = size ? +size : 3;
         const offset = page ? page * limit : 0;
         
-        const condition = name ? { name: { [Op.like]: `%${name}%` } } : null;
+        const condition = {};
+        if (name) {
+            condition.name = { [Op.like]: `%${name}%` };
+        }
+        if (location) {
+            condition.locationId = parseInt(location);
+        }
+        if (price) {
+            condition.price = { [Op.lte]: price };
+        }
+        if (days) {
+            condition.days = days;
+        }
+        if (owner) {
+            condition.userId = parseInt(owner);
+        }
 
-        return Group.findAndCountAll({ limit: limit, offset: offset, where: condition, include: [User, Location] })
+        let orderQuery = [];
+        if (order) {
+            orderQuery.push([order, direction ? direction : 'ASC']);
+        }
+
+        return Group.findAndCountAll({ limit: limit, offset: offset, order: orderQuery, where: condition, 
+                include: [
+                    { model: Belong, required: false, include: [{ model: User, required: false }], where: { confirmed: true } },
+                    { model: User, as: 'user' },
+                    Location
+                ]
+            })
             .then(groups => {
                 const { count: totalItems, rows: data } = groups;
                 const currentPage = page ? +page : 0;

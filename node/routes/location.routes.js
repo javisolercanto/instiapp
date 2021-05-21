@@ -1,6 +1,6 @@
 const express = require('express');
 const { AuthJwt } = require("../middleware");
-const CategoryController = require("../controllers/location.controller");
+const LocationController = require("../controllers/location.controller");
 const cors = require('cors');
 
 module.exports = (app) => {
@@ -20,27 +20,26 @@ module.exports = (app) => {
     });
 
     app.get('/api/location/find',
-        CategoryController.findAll
+        LocationController.findAll
     );
     app.get('/api/location/find/:location',
-        CategoryController.findByName
+        LocationController.findByName
     );
     app.get('/api/location/find/:latitude/:longitude',
-        CategoryController.findByCoords
+        LocationController.findByCoords
     );
     app.get('/api/location/:location',
-        CategoryController.get
+        LocationController.get
     );
     app.post('/api/location/',
-        [AuthJwt.verifyToken],
-        CategoryController.create
+        LocationController.create
     );
     app.put('/api/location/:location',
         [AuthJwt.verifyToken],
-        CategoryController.update
+        LocationController.update
     );
     app.delete('/api/location/:location',
         [AuthJwt.verifyToken, AuthJwt.isAdmin],
-        CategoryController.delete
+        LocationController.delete
     );
 };

@@ -19,16 +19,6 @@ module.exports = (app) => {
         next();
     });
 
-    // Testing routes
-    // app.get('/api/test/user',
-    //     [AuthJwt.verifyToken],
-    //     UserController.userBoard
-    // );
-    // app.get('/api/test/admin',
-    //     [AuthJwt.verifyToken, AuthJwt.isAdmin],
-    //     UserController.adminBoard
-    // );
-
     // Action routes
     app.get('/api/users',
         [AuthJwt.verifyToken, AuthJwt.isAdmin],

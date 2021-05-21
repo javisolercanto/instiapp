@@ -48,19 +48,19 @@ db.belong = require('./belong')(sequelize, Sequelize);
 db.code.belongsTo(db.user);
 db.user.hasMany(db.code);
 
-db.product.belongsTo(db.user);
+db.product.belongsTo(db.user, { onDelete: 'cascade' });
 db.product.belongsTo(db.category);
 db.user.hasMany(db.product);
 
-db.route.belongsTo(db.user);
+db.route.belongsTo(db.user, { onDelete: 'cascade' });
 db.route.belongsTo(db.location);
 db.user.hasMany(db.route);
 
-db.rental.belongsTo(db.user);
+db.rental.belongsTo(db.user, { onDelete: 'cascade' });
 db.rental.belongsTo(db.location);
 db.user.hasMany(db.rental);
 
-db.post.belongsTo(db.user);
+db.post.belongsTo(db.user, { onDelete: 'cascade' });
 db.post.belongsTo(db.post, { as: 'parent', onDelete: 'cascade' });
 db.post.belongsTo(db.category);
 db.user.hasMany(db.post);
@@ -79,12 +79,6 @@ db.group.belongsTo(db.user);
 db.belong.belongsTo(db.user, { onDelete: 'cascade' });
 db.belong.belongsTo(db.group, { onDelete: 'cascade' });
 db.group.hasMany(db.belong);
-// db.user.belongsToMany(db.group, {
-//   through: db.belong
-// });
-// db.group.belongsToMany(db.user, {
-//   through: db.belong
-// });
 
 // Sync SQL with Sequelize Models USE CAUTION
 // sequelize.sync({ alter: true });

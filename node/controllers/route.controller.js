@@ -55,7 +55,7 @@ module.exports = {
             return res.status(validation.response).send({ error: validation.error });
         }
 
-        Route.update(req.body, { where: { id: route.id } })
+        Route.update(validation.route, { where: { id: route.id } })
             .then(async () => {
                 Route.findByPk(req.params.route, { include: [User, Location] })
                     .then(async route => {

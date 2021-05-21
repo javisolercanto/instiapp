@@ -10,15 +10,26 @@ const Route = Models.route;
 const UserFields = ['id', 'name', 'username', 'email', 'image', 'admin', 'createdAt', 'updatedAt', 'password'];
 
 module.exports = {
-    update(req, res) {
-        const validation = User.validate(req.body);
+    async update(req, res) {
+        const user = await User.findByPk(req.currentUser);
+        if (!user) {
+            return res.status(400).send({ error: 'User not found' });
+        }
+
+        if (!req.body.password) {
+            req.body.password = user.password;
+        }
+
+        const validation = User.validate(req.body, req.body.password !== undefined);
         if (validation.response !== 200) {
             return res.status(validation.response).send({ error: validation.error });
         }
 
-        validation.user.password = Bcrypt.hashSync(validation.user.password, 8);
+        if (req.body.password) {
+            validation.user.password = Bcrypt.hashSync(validation.user.password, 8);
+        }
 
-        User.update(req.body, { where: { id: req.currentUser } })
+        User.update(validation.user, { where: { id: req.currentUser } })
             .then(() => {
                 User.findByPk(req.currentUser)
                     .then(user => {

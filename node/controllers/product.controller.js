@@ -91,7 +91,7 @@ module.exports = {
             .catch(error => res.status(400).send({ error: error }))
     },
     findAll(req, res) {
-        const { page, size, name, price, owner, category, order, direction } = req.query;
+        const { page, size, name, price, owner, category, order, direction, product } = req.query;
         const limit = size ? +size : 3;
         const offset = page ? page * limit : 0;
         
@@ -108,7 +108,10 @@ module.exports = {
         if (owner) {
             condition.userId = parseInt(owner);
         }
-        
+        if (product) {
+            condition.id = { [Op.not]: parseInt(product) };
+        }
+
         let orderQuery = [];
         if (order) {
             orderQuery.push([order, direction ? direction : 'ASC']);

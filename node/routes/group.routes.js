@@ -19,7 +19,7 @@ module.exports = (app) => {
         next();
     });
 
-    app.get('/api/groups',
+    app.get('/api/group/list',
         GroupController.findAll
     );
     app.get('/api/group/:group',

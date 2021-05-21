@@ -55,7 +55,7 @@ module.exports = {
             return res.status(validation.response).send({ error: validation.error });
         }
 
-        Rental.update(req.body, { where: { id: rental.id } })
+        Rental.update(validation.rental, { where: { id: rental.id } })
             .then(async () => {
                 Rental.findByPk(req.params.rental, { include: [User, Location] })
                     .then(async rental => {

@@ -2,17 +2,9 @@ const Bcrypt = require('bcryptjs');
 const Jwt = require('jsonwebtoken');
 const Config = require("../config/auth.config.js");
 const axios = require('axios');
-const nodemailer = require('nodemailer');
+const Mail = require('./email.controller');
 const Models = require('../models');
 const User = Models.user;
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'instiweb.help@gmail.com',
-        pass: 'instiwebpass'
-    }
-});
 
 let mailOptions = {
     from: 'instiweb.help@gmail.com',
@@ -126,14 +118,14 @@ module.exports = {
         \n Don't forget to change your password as soon as possible,
         \nThis is a support message please don't reply,`;
 
-        transporter.sendMail(mailOptions, function (error, info) {
+        Mail.send(mailOptions, function (error, info) {
             if (error) {
                 return res.status(400).send({ error: error });
             } else {
                 return User.update({ password: encrypted }, { where: { id: user.id } })
                     .then(user => res.status(200).send(true))
                     .catch(error => res.status(400).send(error))
-            }
-        });
+            }}
+        );
     },
 };

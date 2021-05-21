@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     static validate(group) {
       if (!group.name || group.name.length < 5 || group.name.length > 100)
         return { response: 400, error: 'Name must be between 5 and 100 characters' }
-      if (!group.description || group.description.length < 5 || group.description.length > 100)
-        return { response: 400, error: 'Description must be between 5 and 100 characters' }
+      if (!group.description || group.description.length < 5 || group.description.length > 255)
+        return { response: 400, error: 'Description must be between 5 and 255 characters' }
       if (!group.price || group.price <= 0 || group.price > 9999)
         return { response: 400, error: 'Price must be between 0€ and 9999€' }
 
