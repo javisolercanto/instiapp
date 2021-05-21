@@ -10,7 +10,7 @@
         <span>{{data.rental.location.name}} ({{data.rental.location.latitude}}, {{data.rental.location.longitude}})</span>
       </section>
     </section>
-    <section v-if="!reducedView" class="box  shadow  rental__toolbar">
+    <section v-if="false" class="box  shadow  rental__toolbar">
       <v-icon color="#35c25e">mdi-eye</v-icon>
       <span>It may interest you</span>
     </section>
@@ -25,7 +25,7 @@
           </span>
           <span class="rental__author">
             <v-icon color="#35c25e">mdi-at</v-icon>
-            {{data.rental.user.name}} (@{{data.rental.user.username}})
+            {{data.rental.user.name}} <cite>(@{{data.rental.user.username}})</cite>
           </span>
           <span class="rental__description">{{data.rental.description}}</span>
         </section>
@@ -51,7 +51,7 @@
         </button>
       </section>
     </section>
-    <section v-if="!reducedView" class="box  shadow  rental__list">
+    <section v-if="false" class="box  shadow  rental__list">
       <RentalPreview
         :rental="rental"
         v-for="rental in data.similarRentals"
@@ -115,8 +115,6 @@ export default class RentalDetails extends Vue {
       RentalService.get(this.$route.params.id).then((res) => {
         if (res.data) {
           this.data.rental = res.data;
-          console.log(this.data.currentUser);
-          console.log(this.data.rental);
           
           if (!this.reducedView) {
             this.listRentals();

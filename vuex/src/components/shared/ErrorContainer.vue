@@ -24,7 +24,7 @@ export default class ErrorContainer extends Vue {
 
   @Watch("errors")
   onChangeErrors(value: string[], oldValue: string[]) {
-    this.data.errors = value;
+    this.errors = value;
     setTimeout(this.clearErrors, 4000);
   }
 

@@ -22,10 +22,10 @@
           </span>
           <span class="group__author">
             <v-icon color="#35c25e">mdi-at</v-icon>
-            {{data.group.user.name}}
+            {{data.group.user.name}} <cite>(@{{data.group.user.username}})</cite>
           </span>
           <span class="group__author">
-            <v-icon color="#35c25e">mdi-account-multiple</v-icon>          
+            <v-icon color="#35c25e">mdi-account-multiple</v-icon>
             {{data.group.belongs.length+1}}
           </span>
           <span class="group__author">
@@ -209,7 +209,7 @@ export default class GroupDetails extends Vue {
 
         GroupService.getNotifications(this.data.group.id)
           .then(res => this.data.notifications = res.data)
-          .catch(err => console.log(err))
+          .catch(err => this.errors.push(err.response.data.error))
       }
     });
   }

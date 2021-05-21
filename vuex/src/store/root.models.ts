@@ -1,8 +1,6 @@
 /** Root State */
 export interface RootState {
-  isLoading: boolean;
   currentUser: User;
-  errors: String;
 }
 
 export type User = {
@@ -28,41 +26,6 @@ export type Location = {
   longitude: string;
 }
 
-export type Rental = {
-  id: number,
-  title: string;
-  description: string;
-  price: number
-  user: User;
-  location: Location;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type SetCurrentUser = Pick<
-  User,
-  "id" | "name" | "username" | "password" | "email" | "image" | "isAuthed" | "admin"
->;
-export type ToggleLoading = {
-  isLoading: boolean
-};
-
-export type SetAuth = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-  code?: string[];
-  changeScreen: any;
-  showErrors: any;
-};
-
-export type ListProducts = {
-  limit: number;
-  offset: number;
-  author?: User;
-}
-
 export type Product = {
   id: number,
   name: string;
@@ -75,15 +38,59 @@ export type Product = {
   updatedAt: Date;
 };
 
-export type Comment = {
-  id: number;
-  message: string;
-  commentAuthor: User,
-  commentProduct: Product;
-}
+export type Rental = {
+  id: number,
+  title: string;
+  description: string;
+  price: number;
+  user: User;
+  location: Location;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Route = {
+  id: number,
+  title: string;
+  description: string;
+  price: number;
+  seats: number;
+  user: User;
+  date: Date;
+  location: Location;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Group = {
+  id: number,
+  name: string;
+  description: string;
+  price: number;
+  days: string;
+  user: User;
+  belongs: User[];
+  location: Location;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type SetCurrentUser = Pick<
+  User,
+  "id" | "name" | "username" | "password" | "email" | "image" | "isAuthed" | "admin"
+>;
+
+export type SetAuth = {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  code?: string[];
+  changeScreen: any;
+  showErrors: any;
+};
 
 export const initialRootState: RootState = {
-  isLoading: false,
   currentUser: {
     id: 0,
     name: "",
@@ -94,5 +101,4 @@ export const initialRootState: RootState = {
     isAuthed: false,
     admin: false
   },
-  errors: "",
 };

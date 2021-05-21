@@ -1,6 +1,6 @@
 <template>
   <section>
-    <iframe id="gmap_canvas"
+    <iframe
       v-bind:src="`https://maps.google.com/maps?q=${lat},${long}&ie=UTF8&iwloc=&output=embed`" 
       frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
     </iframe>
@@ -11,7 +11,7 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 @Component({
-  name: "map",
+  name: "appMap",
 })
 export default class Map extends Vue {
   @Prop({ required: true, type: String }) lat: string;

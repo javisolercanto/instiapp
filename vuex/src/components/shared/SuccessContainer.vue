@@ -12,7 +12,7 @@ import { Component, Emit, Prop, Vue, Watch} from "vue-property-decorator";
   name: "successContainer",
 })
 export default class SuccessContainer extends Vue {
-  @Prop({ required: true, type: Array }) message: string;
+  @Prop({ required: true, type: String }) message: string;
 
   constructor() {
     super();

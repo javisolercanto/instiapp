@@ -29,7 +29,7 @@
           </span>
           <span class="product__author">
             <v-icon color="#35c25e">mdi-at</v-icon>
-            {{data.product.user.name}}
+            {{data.product.user.name}} <cite>(@{{data.product.user.username}})</cite>
           </span>
           <span class="product__description">{{data.product.description}}</span>
         </section>
@@ -51,7 +51,7 @@
         <button v-if="$store.getters.currentUser.id === data.product.user.id" @click="deleteProduct()" class="button  action__button  action__button--red" 
           @mouseover="removeOnHover = true" 
           @mouseleave="removeOnHover = false">
-            <v-icon v-bind:color="removeOnHover ? '#a52d29' : '#c23834'">mdi-delete</v-icon>
+            <v-icon v-bind:color="removeOnHover ? '#a52d29' : '#f23934'">mdi-delete</v-icon>
         </button>
       </section>
     </section>
@@ -117,8 +117,6 @@ export default class ProductDetails extends Vue {
       ProductService.get(this.$route.params.id).then((res) => {
         if (res.data) {
           this.data.product = res.data;
-          console.log(this.data.currentUser);
-          console.log(this.data.product);
           
           if (!this.reducedView) {
             this.listProducts();
@@ -139,6 +137,7 @@ export default class ProductDetails extends Vue {
   listProducts(): void {
     const filters = {
       category: this.data.product.category ? this.data.product.category.id : 2,
+      product: this.data.product.id,
       page: 0,
       size: 1,
       order: "updatedAt",

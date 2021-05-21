@@ -39,15 +39,12 @@ import store, { storeTypes } from "../../store";
 import { Route } from "vue-router";
 
 @Component({
-  name: "header",
+  name: "appHeader",
 })
 export default class Header extends Vue {
   data = {
   };
 
-  getProfileImage(image: string): string {
-    return 'background-image: url("' + image + '")'; 
-  }
 }
 </script>
 
@@ -56,14 +53,7 @@ export default class Header extends Vue {
   height: 60px;
   width: 100%;
 
-  /* background-color: var(--primary-color); */
   background-color: white;
-
-  /* margin-top: 1vh;
-  margin-left: 1vh;
-  margin-right: 1vh; */
-
-  z-index: 2;
 
   display: flex;
   align-items: center;
@@ -146,62 +136,6 @@ export default class Header extends Vue {
 .header__user img {
   height: 70%;
   margin-right: 20px;
-}
-
-.header__user span {
-}
-
-.header__user__imgwrapper {
-  min-width: 40px;
-  min-height: 40px;
-  max-width: 40px;
-  max-height: 40px;
-  width: 40px;
-  height: 40px;
-
-  margin-right: 20px;
-  border-radius: 50%;
-
-  background-size: cover;
-}
-
-@media (max-width: 600px) {
-  .header__menu {
-    height: 60px;
-
-    flex-direction: column;
-  }
-
-  .header__logo {
-    width: 100%;
-
-    cursor: pointer;
-
-    transition: 0.2s all;
-  }
-
-  .header__menu:hover {
-    width: 75px;
-    height: 400px;
-  }
-
-  .header__menu__submenu {
-    margin-left: 0;
-    margin-top: 100px;
-    flex-direction: column;
-  }
-
-  .header__menu__submenu hr {
-    height: 1px;
-    width: 70%;
-  }
-
-  .header__menu__submenu section img {
-    height: 100%;
-    width: 70%;
-
-    transition: height 0.3s linear;
-  }
 }
 
 </style>

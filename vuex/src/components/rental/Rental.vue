@@ -180,8 +180,6 @@ export default class Rentals extends Vue {
   }
 
   onChangePage(event) {
-    console.log(this.data.locations);
-    
     if (event < 0 || event >= this.data.totalPages) {
       return;
     }

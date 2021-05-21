@@ -62,7 +62,6 @@
             id="username"
             v-model="data.user.username"
             type="text"
-            autocomplete="username"
             name="username"
             placeholder="Username"
             required

@@ -11,7 +11,6 @@ import { Route } from "vue-router";
 
 import Component from "vue-class-component";
 import Header from "../shared/Header.vue";
-import Footer from "../shared/Footer.vue";
 
 import { store, storeTypes } from "../../store";
 import { getToken } from "../../common/jwt.service";
@@ -20,7 +19,6 @@ import { getToken } from "../../common/jwt.service";
   name: "home",
   components: {
     Header,
-    Footer,
   },
 })
 export default class Home extends Vue {
@@ -39,7 +37,6 @@ export default class Home extends Vue {
 <style>
 
 .home {
-  /* background-image: url('../../../assets/images/paperwall.jpeg'); */
   background-repeat: repeat;
   background-size: cover;
 

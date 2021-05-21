@@ -6,38 +6,22 @@
 
 <script lang="ts">
 import Vue from "vue";
-import store, { storeTypes } from "./store";
-import { RootState } from "./store/root.models";
-import { Loader, Header, Footer } from "./components";
 
 export default Vue.extend({
   name: "App",
-  components: { Loader, Header, Footer },
-  created() {
-    this.reloadProducts();
-  },
-  methods: {
-    reloadProducts() {},
-  },
 });
 </script>
 
 <style>
 :root {
-  /* Red */
-  /* --primary-color: #c23835;
-  --primary-color-dark: #A12724; */
-
   /* Green */
   --primary-color: #35c25e;
   --primary-color-dark: #24a146;
 
-  /* Blue */
-  /* --primary-color: #35A2C2;
-  --primary-color-dark: #247FA1; */
-
-  --warn-color: #c23834;
+  --warn-color: #f23934;
   --warn-color-dark: #a52d29;
+  --success-color: #29EE62;
+  --success-color-dark: #32CC5E;
   --text-color: #474747;
   --bg-color: #fff;
 }
@@ -77,6 +61,17 @@ export default Vue.extend({
   transition: 0.3s all;
 }
 
+.button:disabled:hover,
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+  border: 2px var(--primary-color) solid;
+  color: var(--primary-color) !important;
+  background-color: transparent;
+  font-size: 1rem;
+}
+
+.button--actived,
 .button:hover {
   font-size: 1.1rem;
   background-color: var(--primary-color);

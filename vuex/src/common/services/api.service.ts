@@ -14,12 +14,6 @@ const ApiService = {
     Vue.axios.defaults.headers.common["x-access-token"] = `${getToken()}`;
   },
 
-  query(resource, params) {
-    return Vue.axios.get(resource, params).catch(error => {
-      throw new Error(`[RWV] ApiService ${error}`);
-    });
-  },
-
   get(resource) {
     return Vue.axios.get(`${resource}`).catch(error => {
       throw new Error(`[RWV] ApiService ${error}`);

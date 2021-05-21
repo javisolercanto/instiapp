@@ -1,6 +1,7 @@
 <template>
   <div class="not-found">
-    <img src="https://github.com/JavierSolerArtero99/DRF_VUEx/blob/master/Vuex/images/404.png?raw=true" alt="404 error">
+
+    <v-icon color="#35c25e" x-large>mdi-alert</v-icon>
 
     <h2><strong>Error</strong> 404</h2>
     <span>The page you were looking for is no longer here</span>
@@ -9,14 +10,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import store from "../../store";
 
 export default Vue.extend({
   name: "NotFound",
-  computed: {
-  },
-  mounted() {
-  },
 });
 </script>
 
@@ -27,7 +23,7 @@ export default Vue.extend({
   justify-content: center;
   flex-direction: column;
 
-  color: white;
+  color: var(--text-color);
 }
 
 h2 {
@@ -35,7 +31,7 @@ h2 {
 }
 
 strong {
-  color: #5136ff;
+  color: var(--primary-color);
 }
 
 img {

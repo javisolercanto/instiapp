@@ -38,18 +38,6 @@
         </select>
       </section>
       <section class="market__filters__wrapper">
-        <label class="market__filters__price__label" for="date">Date:</label>
-        <input
-          class="input"
-          v-model="data.filters.date"
-          name="date"
-          id="date"
-          type="date"
-          @change="listGroups()"
-        >
-        <!-- <i class="clearable__clear">&times;</i> -->
-      </section>
-      <section class="market__filters__wrapper">
         <label class="market__filters__price__label" for="price">Max. Price: 
           <input 
             class="market__filters__price__input"
@@ -126,7 +114,6 @@ export default class Groups extends Vue {
       price: 900.0,
       seats: 1,
       owner: null as Number | null,
-      date: null,
       page: 0,
       size: 3,
       order: "",
@@ -193,8 +180,6 @@ export default class Groups extends Vue {
   }
 
   onChangePage(event) {
-    console.log(this.data.locations);
-    
     if (event < 0 || event >= this.data.totalPages) {
       return;
     }

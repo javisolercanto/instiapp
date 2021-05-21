@@ -178,8 +178,8 @@ export default class Profile extends Vue {
   RENTALS_STATS: number = 3;
 
   isLoadingStats: boolean = true;
-  errors = [];
-  message = '';
+  errors: string[] = [];
+  message: string = '';
   FabTypeEnum = FabTypeEnum as any;
   
   data = {

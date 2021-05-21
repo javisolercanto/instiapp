@@ -1,14 +1,13 @@
-export { default as Loader } from "./Loader.vue";
-
 // HOME
 export { default as Home } from "./home/Home.vue";
 
 // SHARED COMPONENTS
 export { default as Header } from "./shared/Header.vue";
-export { default as Footer } from "./shared/Footer.vue";
 export { default as Pagination } from "./shared/Pagination.vue";
 export { default as ErrorContainer } from "./shared/ErrorContainer.vue";
+export { default as SuccessContainer } from "./shared/SuccessContainer.vue";
 export { default as Fab } from "./shared/Fab.vue";
+export { default as Map } from "./shared/Map.vue";
 export { default as Spinner } from "./shared/Spinner.vue";
 export { default as NotFound } from "./shared/NotFound.vue";
 
@@ -24,9 +23,17 @@ export { default as RentalEditor } from "./rental/RentalEditor.vue";
 export { default as RentalPreview } from "./rental/RentalPreview.vue";
 export { default as RentalDetails } from "./rental/RentalDetails.vue";
 
-// COMMENTS
-export { default as Comments } from "./comments/Comments.vue";
-export { default as CommentComponent } from "./comments/Comment.vue";
+// ROUTE
+export { default as Route } from "./route/Route.vue";
+export { default as RouteEditor } from "./route/RouteEditor.vue";
+export { default as RoutePreview } from "./route/RoutePreview.vue";
+export { default as RouteDetails } from "./route/RouteDetails.vue";
+
+// GROUP
+export { default as Group } from "./group/Group.vue";
+export { default as GroupEditor } from "./group/GroupEditor.vue";
+export { default as GroupPreview } from "./group/GroupPreview.vue";
+export { default as GroupDetails } from "./group/GroupDetails.vue";
 
 // AUTH
 export { default as Login } from "./login/Login.vue";
@@ -35,4 +42,3 @@ export { default as Recovery } from "./recovery/Recovery.vue";
 
 // PROFILE
 export { default as Profile } from "./profile/Profile.vue";
-export { default as EditProfile } from "./profile/EditProfile.vue";

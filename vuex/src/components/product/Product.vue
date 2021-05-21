@@ -113,7 +113,7 @@ export default class Products extends Vue {
       name: "",
       category: null,
       price: 100.0,
-      owner: null,
+      owner: null as Number | null,
       page: 0,
       size: 3,
       order: "",

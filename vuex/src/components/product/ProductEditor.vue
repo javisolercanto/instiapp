@@ -28,6 +28,7 @@
           v-model="data.product.price"
           type="number"
           name="price"
+          step="0.01"
           min="0"
           max="999"
           required
@@ -132,7 +133,7 @@ export default class ProductEditor extends Vue {
       ProductService.create(this.data.product)
         .then(res => {
           if (res.data)
-            this.$router.push({ path: "app/product", params: { id: res.data.id } });
+            this.$router.push({ name: "product", params: { id: res.data.id } });
         })
         .catch(err => this.errors.push(err.response.data.error))
     }

@@ -11,7 +11,7 @@
         <span v-if="!data.route.location">No location available</span>
       </section>
     </section>
-    <section v-if="!reducedView" class="box  shadow  route__toolbar">
+    <section v-if="1 === 2" class="box  shadow  route__toolbar">
       <v-icon color="#35c25e">mdi-eye</v-icon>
       <span>It may interest you</span>
     </section>
@@ -30,7 +30,7 @@
           </span>
           <span class="route__author">
             <v-icon color="#35c25e">mdi-at</v-icon>
-            {{data.route.user.name}}
+            {{data.route.user.name}} <cite>(@{{data.route.user.username}})</cite>
           </span>
           <span class="route__description">{{data.route.description}}</span>
         </section>
@@ -56,7 +56,7 @@
         </button>
       </section>
     </section>
-    <section v-if="!reducedView" class="box  shadow  route__list">
+    <section v-if="1 === 2" class="box  shadow  route__list">
       <RoutePreview
         :route="route"
         v-for="route in data.similarRoutes"
@@ -120,8 +120,6 @@ export default class RouteDetails extends Vue {
       RouteService.get(this.$route.params.id).then((res) => {
         if (res.data) {
           this.data.route = res.data;
-          console.log(this.data.currentUser);
-          console.log(this.data.route);
           
           if (!this.reducedView) {
             this.listRoutes();

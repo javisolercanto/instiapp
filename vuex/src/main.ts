@@ -14,8 +14,13 @@ import {
   Rental,
   RentalDetails,
   RentalEditor,
+  Route,
+  RouteDetails,
+  RouteEditor,
+  Group,
+  GroupDetails,
+  GroupEditor,
   Profile,
-  EditProfile,
   Register,
   Recovery
 } from "./components";
@@ -23,8 +28,6 @@ import ApiService from "./common/services/api.service";
 import { getToken } from "./common/jwt.service";
 
 Vue.use(VueRouter);
-// Vue.use(VueMaterial);
-
 Vue.filter("currency", currency);
 
 Vue.config.productionTip = false;
@@ -34,14 +37,14 @@ ApiService.init();
 const router = new VueRouter({
   base: process.env.BASE_URL,
   routes: [
-    { path: "/", component: App, redirect: "/app" },
+    { path: "/", name: 'root', component: App, redirect: "/app" },
     {
       path: "/app",
       component: Home,
-      beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next),
+      redirect: "/app/product",
       children: [
         {
-          path: "product", component: Product,
+          path: "product", name: 'product', component: Product,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
@@ -57,7 +60,7 @@ const router = new VueRouter({
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
-          path: "rental", component: Rental,
+          path: "rental", name: 'rental', component: Rental,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
@@ -73,17 +76,41 @@ const router = new VueRouter({
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
-          path: 'profile', component: Profile, 
+          path: "route", name: 'route', component: Route,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
-          path: "profile-edit", component: EditProfile,
+          path: "route/:id", name: "route-details", component: RouteDetails,
             beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
         },
         {
-          path: "panel-admin", component: EditProfile,
-            beforeEnter: (to, from, next) => checkRoutePermissions('/', 'isAdmin', to, from, next)
-        }
+          path: "route-editor/", name: "route-creator", component: RouteEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "route-editor/:id", name: "route-editor", component: RouteEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "group", name: 'group', component: Group,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "group/:id", name: "group-details", component: GroupDetails,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "group-editor/", name: "group-creator", component: GroupEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: "group-editor/:id", name: "group-editor", component: GroupEditor,
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
+        {
+          path: 'profile', name: 'profile', component: Profile, 
+            beforeEnter: (to, from, next) => checkRoutePermissions('/login', 'isAuthed', to, from, next)
+        },
       ]
     },
     { path: "/login", component: Login },
@@ -98,7 +125,9 @@ function checkRoutePermissions(failurePath: string, property: any, to, from, nex
     next();
   
   if (getToken()) 
-    store.dispatch(storeTypes.root.actions!.autoAuth()).then(res => next(), err => next({ path: failurePath }));
+    store.dispatch(storeTypes.root.actions!.autoAuth())
+      .then(res => next(), err => next({ path: failurePath }))
+      .catch(err => storeTypes.root.actions!.purgeAuth())
 
   else next({ path: failurePath })
 }

@@ -51,7 +51,7 @@ export default class GroupPreview extends Vue {
 
   getNameSize(originalSize, field, secondField): string {
     const attr = secondField ? this.group[field][secondField] : this.group[field];
-    if (attr.length > 15 && attr.length <= 80)
+    if (attr.length > 20 && attr.length <= 80)
       originalSize = 600/attr.length;
 
     if (attr.length > 80) {
