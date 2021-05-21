@@ -1,8 +1,8 @@
-# InstiWeb by Javier Soler Cantó
+# 🚀 InstiWeb by Javier Soler Cantó
 
 ## Start project:
 
-### Backend
+### ⚙️ Backend
 
 - Execute 
 
@@ -19,7 +19,7 @@ docker-compose up
 - The backend will be listening on port 8080
 
 
-### Frontend
+### 🖥 Frontend
 
 - Execute 
 
